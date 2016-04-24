@@ -7,6 +7,7 @@ using TextStyles.Core;
 using System.Collections.Generic;
 using System;
 using TextStyles.Android;
+using Android.Graphics;
 
 namespace TextStyleDemo.Android
 {
@@ -59,6 +60,7 @@ namespace TextStyleDemo.Android
 			_styleManager.Add (body, "body", textBody);
 
 			var toggleButton = FindViewById<ImageButton> (Resource.Id.refreshIcon);
+			toggleButton.SetBackgroundColor (Color.Transparent);
 			toggleButton.Click += (sender, e) => {
 				Console.WriteLine ("Toggled");
 
