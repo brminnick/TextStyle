@@ -35,6 +35,7 @@ namespace TextStyles.iOS
 		/// </summary>
 		TextStyle ()
 		{
+			_textStyles = new Dictionary<string, TextStyleParameters> ();
 		}
 
 		#region Public Methods
@@ -57,6 +58,29 @@ namespace TextStyles.iOS
 		{
 			_textStyles = styles;
 			Refresh ();
+		}
+
+		/// <summary>
+		/// Sets the style.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="style">Style.</param>
+		/// <param name="refresh">If set to <c>true</c> refresh.</param>
+		public virtual void SetStyle (string id, TextStyleParameters style, bool refresh = false)
+		{
+			_textStyles [id] = style;
+			if (refresh) {
+				Refresh ();
+			}
+		}
+
+		/// <summary>
+		/// Gets the styles.
+		/// </summary>
+		/// <returns>The styles.</returns>
+		public virtual List<TextStyleParameters> GetStyles ()
+		{
+			return _textStyles.Select (v => v.Value).ToList ();
 		}
 
 		/// <summary>
@@ -84,6 +108,17 @@ namespace TextStyles.iOS
 			}
 		}
 
+		// TEMP
+		internal Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
+
+		public static TextStyle CreateInstance (string id)
+		{
+			lock (padlock) {
+				_instances [id] = new TextStyle ();
+				return _instances [id];
+			}
+		}
+
 		/// <summary>
 		/// Creates an NSAttibutedString html string using the custom tags for styling.
 		/// </summary>
@@ -91,7 +126,6 @@ namespace TextStyles.iOS
 		/// <param name="text">Text to display including html tags</param>
 		/// <param name="customTags">A list of custom <c>CSSTagStyle</c> instances that set the styling for the html</param>
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
-		/// <param name="encoding">String encoding type</param>
 		public static NSAttributedString CreateHtmlString (string text, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var error = new NSError ();

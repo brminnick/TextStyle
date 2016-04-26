@@ -11,7 +11,7 @@ namespace TextStyles.iOS
 		private Dictionary<object, ViewStyle> _views;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Occur.TextStyles.iOS.StyleManager"/> class.
+		/// Initializes a new instance of the <see cref="TextStyles.iOS.StyleManager"/> class.
 		/// </summary>
 		public StyleManager ()
 		{
