@@ -8,108 +8,18 @@ using System.Linq;
 
 namespace TextStyles.iOS
 {
-	public class TextStyle:ITextStyle
+	public class TextStyle:TextStyleBase, ITextStyle
 	{
 		#region Parameters
 
-		/// <summary>
-		/// The default size for text.
-		/// </summary>
-		public static float DefaultTextSize = 18f;
+		public static Dictionary<string, TextStyle> Instances{ get { return _instances; } }
 
-		public event EventHandler StylesChanged;
+		static Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
+		static readonly object padlock = new object ();
 
 		internal static Type typeLabel = typeof(UILabel);
 		internal static Type typeTextView = typeof(UITextView);
 		internal static Type typeTextField = typeof(UITextField);
-
-		static TextStyle instance = null;
-		static readonly object padlock = new object ();
-
-		internal Dictionary<string, TextStyleParameters> _textStyles;
-
-		#endregion
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TextStyles.iOS,TextStyle"/> class.
-		/// </summary>
-		TextStyle ()
-		{
-			_textStyles = new Dictionary<string, TextStyleParameters> ();
-		}
-
-		#region Public Methods
-
-		/// <summary>
-		/// Sets the CSS string
-		/// </summary>
-		/// <param name="css">Css Style Sheet</param>
-		public virtual void SetCSS (string css)
-		{
-			var styles = CssTextStyleParser.Parse (css);
-			SetStyles (styles);
-		}
-
-		/// <summary>
-		/// Sets the styles dictionary
-		/// </summary>
-		/// <param name="styles">Styles dictionary</param>
-		public virtual void SetStyles (Dictionary<string, TextStyleParameters> styles)
-		{
-			_textStyles = styles;
-			Refresh ();
-		}
-
-		/// <summary>
-		/// Sets the style.
-		/// </summary>
-		/// <param name="id">Identifier.</param>
-		/// <param name="style">Style.</param>
-		/// <param name="refresh">If set to <c>true</c> refresh.</param>
-		public virtual void SetStyle (string id, TextStyleParameters style, bool refresh = false)
-		{
-			_textStyles [id] = style;
-			if (refresh) {
-				Refresh ();
-			}
-		}
-
-		/// <summary>
-		/// Gets the styles.
-		/// </summary>
-		/// <returns>The styles.</returns>
-		public virtual List<TextStyleParameters> GetStyles ()
-		{
-			return _textStyles.Select (v => v.Value).ToList ();
-		}
-
-		/// <summary>
-		/// Gets a style by its selector
-		/// </summary>
-		/// <returns>The style.</returns>
-		/// <param name="selector">Selector.</param>
-		public static TextStyleParameters GetStyle (string selector)
-		{
-			return instance._textStyles.ContainsKey (selector) ? instance._textStyles [selector] : null;
-		}
-
-		/// <summary>
-		/// Returns the main instance of TextStyle 
-		/// </summary>
-		/// <value>The instance.</value>
-		public static TextStyle Instance {
-			get {
-				lock (padlock) {
-					if (instance == null) {
-						instance = new TextStyle ();
-					}
-					return instance;
-				}
-			}
-		}
-
-		// TEMP
-		internal Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
 
 		public static TextStyle CreateInstance (string id)
 		{
@@ -119,6 +29,29 @@ namespace TextStyles.iOS
 			}
 		}
 
+		public static TextStyle Main {
+			get {
+				lock (padlock) {
+					if (!_instances.ContainsKey (MainID)) {
+						_instances [MainID] = new TextStyle ();
+					}
+					return _instances [MainID];
+				}
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TextStyles.iOS,TextStyle"/> class.
+		/// </summary>
+		TextStyle ()
+		{
+			
+		}
+
+		#region Public Methods
+
 		/// <summary>
 		/// Creates an NSAttibutedString html string using the custom tags for styling.
 		/// </summary>
@@ -126,11 +59,11 @@ namespace TextStyles.iOS
 		/// <param name="text">Text to display including html tags</param>
 		/// <param name="customTags">A list of custom <c>CSSTagStyle</c> instances that set the styling for the html</param>
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
-		public static NSAttributedString CreateHtmlString (string text, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
+		public NSAttributedString CreateHtmlString (string text, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var error = new NSError ();
 
-			text = HtmlTextStyleParser.StyleString (text, Instance._textStyles, customTags, useExistingStyles);
+			text = HtmlTextStyleParser.StyleString (text, _textStyles, customTags, useExistingStyles);
 
 			var stringAttribs = new NSAttributedStringDocumentAttributes {
 				DocumentType = NSDocumentType.HTML,
@@ -150,7 +83,7 @@ namespace TextStyles.iOS
 		/// <param name="text">Text to style</param>
 		/// <param name="startIndex">Style start index</param>
 		/// <param name="endIndex">Style end index</param>
-		public static NSMutableAttributedString CreateStyledString (string styleID, string text, int startIndex = 0, int endIndex = -1)
+		public NSMutableAttributedString CreateStyledString (string styleID, string text, int startIndex = 0, int endIndex = -1)
 		{
 			var style = GetStyle (styleID);
 			return CreateStyledString (style, text, startIndex, endIndex);
@@ -164,9 +97,9 @@ namespace TextStyles.iOS
 		/// <param name="text">Text to style</param>
 		/// <param name="startIndex">Style start index</param>
 		/// <param name="endIndex">Style end index</param>
-		public static NSMutableAttributedString CreateStyledString (TextStyleParameters style, string text, int startIndex = 0, int endIndex = -1)
+		public NSMutableAttributedString CreateStyledString (TextStyleParameters style, string text, int startIndex = 0, int endIndex = -1)
 		{
-			var attribs = GetStringAttributes (style);
+			var attribs = GetStringAttributes (style, DefaultTextSize);
 			text = ParseString (style, text);
 
 			if (endIndex == -1) {
@@ -180,29 +113,6 @@ namespace TextStyles.iOS
 		}
 
 		/// <summary>
-		/// Signals that the styles have been updated.
-		/// </summary>
-		public void Refresh ()
-		{
-			StylesChanged?.Invoke (this, EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Sets the body css style for the customTags.
-		/// </summary>
-		/// <param name="baseStyleID">The CSS selector name for the body style</param>
-		/// <param name="customTags">A list of CSSTagStyle custom tags</param>
-		public static void SetBaseStyle (string baseStyleID, ref List<CssTagStyle> customTags)
-		{
-			if (customTags == null)
-				customTags = new List<CssTagStyle> ();
-
-			if (!customTags.Any (x => x.Tag == "body")) {
-				customTags.Add (new CssTagStyle (HtmlTextStyleParser.BODYTAG) { Name = baseStyleID });
-			}
-		}
-
-		/// <summary>
 		/// Creates and styles a new Text container (UIlabel, UITextView, UITextField)
 		/// </summary>
 		/// <param name="styleID">The CSS selector name for the style</param>
@@ -211,7 +121,7 @@ namespace TextStyles.iOS
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
-		public static T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
+		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var isHTML = (!string.IsNullOrEmpty (text) && Common.MatchHtmlTags.IsMatch (text));
 			var target = Activator.CreateInstance<T> ();
@@ -225,8 +135,8 @@ namespace TextStyles.iOS
 			}
 
 			var formattedText = isHTML ?
-				TextStyle.CreateHtmlString (text, customTags, useExistingStyles) :
-				TextStyle.CreateStyledString (styleID, text);
+				CreateHtmlString (text, customTags, useExistingStyles) :
+				CreateStyledString (styleID, text);
 
 			var type = typeof(T);
 			if (type == typeLabel) {
@@ -261,7 +171,7 @@ namespace TextStyles.iOS
 		/// <param name="styleID">The CSS selector name for the style</param>
 		/// <param name="text">Text to display</param>
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
-		public static void Style<T> (T target, string styleID, string text = null)
+		public void Style<T> (T target, string styleID, string text = null)
 		{
 			var style = GetStyle (styleID);
 			var type = typeof(T);
@@ -298,10 +208,10 @@ namespace TextStyles.iOS
 			inset.Right = (style.PaddingRight > float.MinValue) ? style.PaddingRight : inset.Right;
 		}
 
-		internal static void StyleUILabel (UILabel target, TextStyleParameters style, bool setFonts)
+		internal void StyleUILabel (UILabel target, TextStyleParameters style, bool setFonts)
 		{
 			// TODO fix this as its not helping as it stands
-			var attribs = GetStringAttributes (style);
+			var attribs = GetStringAttributes (style, DefaultTextSize);
 			target.TextColor = attribs.ForegroundColor;
 
 			// If setting the font attributes
@@ -331,9 +241,9 @@ namespace TextStyles.iOS
 			}
 		}
 
-		internal static void StyleUITextView (UITextView target, TextStyleParameters style, bool setFonts)
+		internal void StyleUITextView (UITextView target, TextStyleParameters style, bool setFonts)
 		{
-			var attribs = GetStringAttributes (style);
+			var attribs = GetStringAttributes (style, DefaultTextSize);
 			target.Font = attribs.Font;
 
 			// If setting the font attributes
@@ -355,9 +265,9 @@ namespace TextStyles.iOS
 			}
 		}
 
-		internal static void StyleUITextField (UITextField target, TextStyleParameters style, bool setFonts)
+		internal void StyleUITextField (UITextField target, TextStyleParameters style, bool setFonts)
 		{
-			var attribs = GetStringAttributes (style);
+			var attribs = GetStringAttributes (style, DefaultTextSize);
 
 			target.TextColor = attribs.ForegroundColor;
 
@@ -378,13 +288,13 @@ namespace TextStyles.iOS
 			}
 		}
 
-		private static UIStringAttributes GetStringAttributes (TextStyleParameters style)
+		internal static UIStringAttributes GetStringAttributes (TextStyleParameters style, float defaultTextSize)
 		{
 			var stringAttribs = new UIStringAttributes ();
 
 			var fontSize = style.FontSize;
 			if (fontSize <= 0f)
-				fontSize = DefaultTextSize;
+				fontSize = defaultTextSize;
 
 			if (!string.IsNullOrEmpty (style.Font))
 				stringAttribs.Font = UIFont.FromName (style.Font, fontSize);
@@ -425,9 +335,9 @@ namespace TextStyles.iOS
 			return stringAttribs;
 		}
 
-		internal static NSAttributedString ParseHtmlString (TextStyleParameters style, string text)
+		internal NSAttributedString ParseHtmlString (TextStyleParameters style, string text)
 		{
-			var attribs = GetStringAttributes (style);
+			var attribs = GetStringAttributes (style, DefaultTextSize);
 			text = ParseString (style, text);
 
 			var prettyString = new NSMutableAttributedString (text);
@@ -457,7 +367,7 @@ namespace TextStyles.iOS
 			return text;
 		}
 
-		private static UITextAlignment GetAlignment (TextStyleAlign alignment)
+		static UITextAlignment GetAlignment (TextStyleAlign alignment)
 		{
 			switch (alignment) {
 			case TextStyleAlign.Left:

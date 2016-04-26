@@ -9,14 +9,16 @@ namespace TextStyles.iOS
 	public class StyleManager : IDisposable
 	{
 		private Dictionary<object, ViewStyle> _views;
+		TextStyle _instance;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextStyles.iOS.StyleManager"/> class.
 		/// </summary>
-		public StyleManager ()
+		public StyleManager (TextStyle instance = null)
 		{
+			_instance = instance ?? TextStyle.Main;
 			_views = new Dictionary<object, ViewStyle> ();
-			TextStyle.Instance.StylesChanged += TextStyle_Instance_StylesChanged;
+			TextStyle.Main.StylesChanged += TextStyle_Instance_StylesChanged;
 		}
 
 		/// <summary>
@@ -30,10 +32,10 @@ namespace TextStyles.iOS
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
 		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
-			var target = TextStyle.Create<T> (styleID, text, customTags, useExistingStyles);
-			TextStyle.SetBaseStyle (styleID, ref customTags);
+			var target = _instance.Create<T> (styleID, text, customTags, useExistingStyles);
+			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var reference = new ViewStyle (target as UIView, text, true) {
+			var reference = new ViewStyle (_instance, target as UIView, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -55,9 +57,9 @@ namespace TextStyles.iOS
 		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			// Set the base style for the field
-			TextStyle.SetBaseStyle (styleID, ref customTags);
+			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var viewStyle = new ViewStyle ((UIView)target, text, true) {
+			var viewStyle = new ViewStyle (_instance, (UIView)target, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -127,7 +129,7 @@ namespace TextStyles.iOS
 			_views.Clear ();
 			_views = null;
 
-			TextStyle.Instance.StylesChanged -= TextStyle_Instance_StylesChanged;
+			_instance.StylesChanged -= TextStyle_Instance_StylesChanged;
 		}
 
 		void TextStyle_Instance_StylesChanged (object sender, EventArgs e)
@@ -153,10 +155,13 @@ namespace TextStyles.iOS
 
 		string _rawText;
 
+		TextStyle _instance;
+
 		bool _updateConstraints;
 
-		public ViewStyle (UIView target, string rawText, bool updateConstraints)
+		public ViewStyle (TextStyle instance, UIView target, string rawText, bool updateConstraints)
 		{
+			_instance = instance;
 			Target = target;
 			_rawText = rawText;
 			_updateConstraints = updateConstraints;
@@ -170,15 +175,15 @@ namespace TextStyles.iOS
 				_rawText = value;
 			}
 
-			var style = TextStyle.GetStyle (StyleID);
+			var style = _instance.GetStyle (StyleID);
 			TextValue = TextStyle.ParseString (style, _rawText);
 
-			AttributedValue = ContainsHtml ? TextStyle.CreateHtmlString (TextValue, CustomTags) : TextStyle.CreateStyledString (style, TextValue);
+			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (TextValue, CustomTags) : _instance.CreateStyledString (style, TextValue);
 		}
 
 		public void UpdateFrame ()
 		{
-			var style = TextStyle.GetStyle (StyleID);
+			var style = _instance.GetStyle (StyleID);
 
 			// Offset the frame if needed
 			if (_updateConstraints && style.LineHeight < 0f) {
@@ -202,21 +207,21 @@ namespace TextStyles.iOS
 		public void UpdateDisplay ()
 		{
 			var type = Target.GetType ();
-			var style = TextStyle.GetStyle (StyleID);
+			var style = _instance.GetStyle (StyleID);
 
 			if (type == TextStyle.typeLabel) {
 				var label = Target as UILabel;
-				TextStyle.StyleUILabel (label, style, !ContainsHtml);
+				_instance.StyleUILabel (label, style, !ContainsHtml);
 				label.AttributedText = AttributedValue;
 
 			} else if (type == TextStyle.typeTextView) {
 				var textView = Target as UITextView;
-				TextStyle.StyleUITextView (textView, style, !ContainsHtml);
+				_instance.StyleUITextView (textView, style, !ContainsHtml);
 				textView.AttributedText = AttributedValue;
 
 			} else if (type == TextStyle.typeTextField) {
 				var textField = Target as UITextField;
-				TextStyle.StyleUITextField (textField, style, true);
+				_instance.StyleUITextField (textField, style, true);
 				textField.AttributedText = AttributedValue;
 
 			} else {

@@ -35,15 +35,15 @@ namespace TextStyleDemo.Android
 			_cssOne = OpenCSSFile ("StyleOne.css");
 			_cssTwo = OpenCSSFile ("StyleTwo.css");
 
-			TextStyle.Instance.AddFont ("Archistico", "Archistico_Simple.ttf");
-			TextStyle.Instance.AddFont ("Avenir-Medium", "Avenir-Medium.ttf");
-			TextStyle.Instance.AddFont ("Avenir-Book", "Avenir-Book.ttf");
-			TextStyle.Instance.AddFont ("Avenir-Heavy", "Avenir-Heavy.ttf");
-			TextStyle.Instance.AddFont ("BreeSerif-Regular", "BreeSerif-Regular.ttf");
-			TextStyle.Instance.AddFont ("OpenSans-CondBold", "OpenSans-CondBold.ttf");
-			TextStyle.Instance.AddFont ("OpenSans-CondLight", "OpenSans-CondLight.ttf");
+			TextStyle.Main.AddFont ("Archistico", "Archistico_Simple.ttf");
+			TextStyle.Main.AddFont ("Avenir-Medium", "Avenir-Medium.ttf");
+			TextStyle.Main.AddFont ("Avenir-Book", "Avenir-Book.ttf");
+			TextStyle.Main.AddFont ("Avenir-Heavy", "Avenir-Heavy.ttf");
+			TextStyle.Main.AddFont ("BreeSerif-Regular", "BreeSerif-Regular.ttf");
+			TextStyle.Main.AddFont ("OpenSans-CondBold", "OpenSans-CondBold.ttf");
+			TextStyle.Main.AddFont ("OpenSans-CondLight", "OpenSans-CondLight.ttf");
 
-			TextStyle.Instance.SetCSS (_cssOne);
+			TextStyle.Main.SetCSS (_cssOne);
 
 			var labelOne = FindViewById<TextView> (Resource.Id.labelOne);
 			var labelTwo = FindViewById<TextView> (Resource.Id.labelTwo);
@@ -66,7 +66,7 @@ namespace TextStyleDemo.Android
 
 				var css = _isFirstStyleSheet ? _cssTwo : _cssOne;
 				_isFirstStyleSheet = !_isFirstStyleSheet;
-				TextStyle.Instance.SetCSS (css);
+				TextStyle.Main.SetCSS (css);
 			};
 		}
 

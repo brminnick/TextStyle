@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using Android.Text;
 using Android.Widget;
@@ -13,25 +12,39 @@ using Android.Views;
 
 namespace TextStyles.Android
 {
-	public class TextStyle:ITextStyle
+	public class TextStyle:TextStyleBase, ITextStyle
 	{
+
 		#region Parameters
 
-		/// <summary>
-		/// The default size for text.
-		/// </summary>
-		public static float DefaultTextSize = 18f;
+		public static Dictionary<string, TextStyle> Instances{ get { return _instances; } }
 
-		public event EventHandler StylesChanged;
+		static Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
+		static readonly object padlock = new object ();
 
 		internal static Type typeTextView = typeof(TextView);
 		internal static Type typeEditText = typeof(EditText);
 
-		static TextStyle instance = null;
-		static readonly object padlock = new object ();
-
-		internal Dictionary<string, TextStyleParameters> _textStyles;
 		internal Dictionary<string, Typeface> _typeFaces;
+
+		public static TextStyle CreateInstance (string id)
+		{
+			lock (padlock) {
+				_instances [id] = new TextStyle ();
+				return _instances [id];
+			}
+		}
+
+		public static TextStyle Main {
+			get {
+				lock (padlock) {
+					if (!_instances.ContainsKey (MainID)) {
+						_instances [MainID] = new TextStyle ();
+					}
+					return _instances [MainID];
+				}
+			}
+		}
 
 		#endregion
 
@@ -44,16 +57,6 @@ namespace TextStyles.Android
 		}
 
 		#region Public Methods
-
-		/// <summary>
-		/// Sets the CSS string
-		/// </summary>
-		/// <param name="css">Css Style Sheet</param>
-		public virtual void SetCSS (string css)
-		{
-			var styles = CssTextStyleParser.Parse (css);
-			SetStyles (styles);
-		}
 
 		/// <summary>
 		/// Adds the typeface.
@@ -78,70 +81,25 @@ namespace TextStyles.Android
 			return font;
 		}
 
-		/// <summary>
-		/// Sets the styles dictionary
-		/// </summary>
-		/// <param name="styles">Styles dictionary</param>
-		public virtual void SetStyles (Dictionary<string, TextStyleParameters> styles)
+
+		public ISpanned CreateHtmlString (string text, string defaultStyle, List<CssTagStyle> customTags = null, bool mergeExistingStyles = true, bool includeExistingStyles = true)
 		{
-			_textStyles = styles;
-
-			// Pre-Parse android specific styles
-			foreach (var item in _textStyles) {
-				item.Value.FontSize = (item.Value.FontSize <= 0f) ? DefaultTextSize : item.Value.FontSize;
-
-				// scale text spacing
-				if (Math.Abs (item.Value.LetterSpacing) > 0f) {
-					item.Value.LetterSpacing = (item.Value.LetterSpacing / item.Value.FontSize);
-				}
-			}
-
-			Refresh ();
-		}
-
-		/// <summary>
-		/// Gets a style by its selector
-		/// </summary>
-		/// <returns>The style.</returns>
-		/// <param name="selector">Selector.</param>
-		public static TextStyleParameters GetStyle (string selector)
-		{
-			return instance._textStyles.ContainsKey (selector) ? instance._textStyles [selector] : null;
-		}
-
-		/// <summary>
-		/// Returns the main instance of TextStyle 
-		/// </summary>
-		/// <value>The instance.</value>
-		public static TextStyle Instance {
-			get {
-				lock (padlock) {
-					if (instance == null) {
-						instance = new TextStyle ();
-					}
-					return instance;
-				}
-			}
-		}
-
-		public static ISpanned CreateHtmlString (string text, string defaultStyle, List<CssTagStyle> customTags = null, bool mergeExistingStyles = true, bool includeExistingStyles = true)
-		{
-			var styles = customTags != null ? MergeStyles (defaultStyle, customTags, mergeExistingStyles, includeExistingStyles) : Instance._textStyles;
+			var styles = customTags != null ? MergeStyles (defaultStyle, customTags, mergeExistingStyles, includeExistingStyles) : _textStyles;
 			if (!styles.ContainsKey (defaultStyle))
-				styles.Add (defaultStyle, Instance._textStyles [defaultStyle]);
+				styles.Add (defaultStyle, _textStyles [defaultStyle]);
 
-			var converter = new CustomHtmlParser (text, styles, defaultStyle);
+			var converter = new CustomHtmlParser (this, text, styles, defaultStyle);
 			return converter.Convert ();
 		}
 
-		static Dictionary<string, TextStyleParameters> MergeStyles (string defaultStyleID, List<CssTagStyle> customTags, bool mergeExistingStyles = true, bool includeExistingStyles = true)
+		Dictionary<string, TextStyleParameters> MergeStyles (string defaultStyleID, List<CssTagStyle> customTags, bool mergeExistingStyles = true, bool includeExistingStyles = true)
 		{
 			var customCSS = new StringBuilder ();
 			foreach (var customTag in customTags)
 				customCSS.AppendLine (customTag.CSS);
 
 			var customStyles = CssTextStyleParser.Parse (customCSS.ToString ());
-			var defaultStyle = Instance._textStyles [defaultStyleID];
+			var defaultStyle = _textStyles [defaultStyleID];
 			if (defaultStyle == null)
 				throw new Exception ("Default Style ID not found: " + defaultStyleID);
 
@@ -149,7 +107,7 @@ namespace TextStyles.Android
 			foreach (var style in customStyles) {
 
 				if (mergeExistingStyles) {
-					Instance._textStyles.TryGetValue (style.Key, out existingStyle);
+					_textStyles.TryGetValue (style.Key, out existingStyle);
 
 					if (existingStyle != null) {
 						style.Value.Merge (existingStyle, false);
@@ -167,13 +125,13 @@ namespace TextStyles.Android
 			return customStyles;
 		}
 
-		public static ISpanned CreateStyledString (string styleID, string text, int startIndex = 0, int endIndex = -1)
+		public ISpanned CreateStyledString (string styleID, string text, int startIndex = 0, int endIndex = -1)
 		{
 			var style = GetStyle (styleID);
 			return CreateStyledString (style, text, startIndex, endIndex);
 		}
 
-		public static ISpanned CreateStyledString (TextStyleParameters style, string text, int startIndex = 0, int endIndex = -1)
+		public ISpanned CreateStyledString (TextStyleParameters style, string text, int startIndex = 0, int endIndex = -1)
 		{
 			if (endIndex == -1)
 				endIndex = text.Length;
@@ -190,7 +148,7 @@ namespace TextStyles.Android
 				return CreateHtmlString (text, style.Name);
 			} else {
 				var builder = new SpannableStringBuilder (text);
-				var font = instance.GetFont (style.Font);
+				var font = GetFont (style.Font);
 				var span = new CustomTypefaceSpan ("", font, style);
 
 				builder.SetSpan (span, startIndex, endIndex, SpanTypes.ExclusiveExclusive);
@@ -198,31 +156,7 @@ namespace TextStyles.Android
 			}
 		}
 
-		/// <summary>
-		/// Signals that the styles have been updated.
-		/// </summary>
-		public void Refresh ()
-		{
-			StylesChanged?.Invoke (this, EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Sets the body css style for the customTags.
-		/// </summary>
-		/// <param name="baseStyleID">The CSS selector name for the body style</param>
-		/// <param name="customTags">A list of CSSTagStyle custom tags</param>
-		public static void SetBaseStyle (string baseStyleID, ref List<CssTagStyle> customTags)
-		{
-			if (customTags == null)
-				customTags = new List<CssTagStyle> ();
-
-			if (!customTags.Any (x => x.Tag == "body")) {
-				customTags.Add (new CssTagStyle (HtmlTextStyleParser.BODYTAG) { Name = baseStyleID });
-			}
-		}
-
-
-		public static T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
+		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var target = Activator.CreateInstance<T> ();
 
@@ -230,8 +164,12 @@ namespace TextStyles.Android
 			return target;
 		}
 
+		public void Style<T> (T target, string styleID, string text = null)
+		{
+			Style<T> (target, styleID, text, null);
+		}
 
-		public static void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
+		public void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var style = GetStyle (styleID);
 			var type = typeof(T);
@@ -253,7 +191,7 @@ namespace TextStyles.Android
 				StyleTextView (textView, style, false);
 
 				var builder = new SpannableStringBuilder (ParseString (style, text));
-				var font = instance.GetFont (style.Font);
+				var font = GetFont (style.Font);
 				var span = new CustomTypefaceSpan ("", font, style);
 
 				builder.SetSpan (span, 0, builder.Length (), SpanTypes.ExclusiveExclusive);
@@ -269,7 +207,7 @@ namespace TextStyles.Android
 		#region Private Methods
 
 		// TODO implement this function for styling plain text views, for html based views perhaps not
-		internal static void StyleTextView (TextView target, TextStyleParameters style, bool isPlainText)
+		internal void StyleTextView (TextView target, TextStyleParameters style, bool isPlainText)
 		{
 			var fontSize = (style.FontSize <= 0f) ? DefaultTextSize : style.FontSize;
 			target.SetTextSize (ComplexUnitType.Sp, fontSize);
@@ -279,8 +217,8 @@ namespace TextStyles.Android
 				if (!String.IsNullOrEmpty (style.Color))
 					target.SetTextColor (Color.White.FromHex (style.Color));
 
-				if (!String.IsNullOrEmpty (style.Font) && instance._typeFaces.ContainsKey (style.Font)) {
-					target.Typeface = instance._typeFaces [style.Font];
+				if (!String.IsNullOrEmpty (style.Font) && _typeFaces.ContainsKey (style.Font)) {
+					target.Typeface = _typeFaces [style.Font];
 					target.PaintFlags = target.PaintFlags | PaintFlags.SubpixelText;
 				}
 			}

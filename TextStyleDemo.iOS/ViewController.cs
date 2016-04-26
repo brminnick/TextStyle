@@ -33,7 +33,7 @@ namespace TextStyleDemo.iOS
 
 			// Load the CSS file
 			var style = File.ReadAllText ("StyleOne.css");
-			TextStyle.Instance.SetCSS (style);
+			TextStyle.Main.SetCSS (style);
 
 			// TEMP
 			var stopwatch = Stopwatch.StartNew ();
@@ -48,7 +48,7 @@ namespace TextStyleDemo.iOS
 
 			Console.WriteLine ("Elapsed time {0}", stopwatch.ElapsedMilliseconds);
 
-			TextStyle.Style<UILabel> (labelOne, "h2", headingOne);
+			TextStyle.Main.Style<UILabel> (labelOne, "h2", headingOne);
 
 			AddUIElements ();
 		}
@@ -71,7 +71,7 @@ namespace TextStyleDemo.iOS
 				var css = File.ReadAllText (cssFileName);
 
 				_isFirstStyleSheet = !_isFirstStyleSheet;
-				TextStyle.Instance.SetCSS (css);
+				TextStyle.Main.SetCSS (css);
 			};
 			Add (button);
 

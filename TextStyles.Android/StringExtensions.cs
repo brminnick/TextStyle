@@ -12,7 +12,12 @@ namespace System
 
 		public static ISpanned ToSpannedString (this string target, string defaultStyle, List<CssTagStyle> customStyles = null, bool useExisting = true)
 		{
-			return TextStyle.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
+			return TextStyle.Main.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
+		}
+
+		public static ISpanned ToSpannedString (this string target, string instanceID, string defaultStyle, List<CssTagStyle> customStyles = null, bool useExisting = true)
+		{
+			return TextStyle.Instances [instanceID]?.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
 		}
 	}
 }

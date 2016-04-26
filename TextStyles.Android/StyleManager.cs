@@ -10,14 +10,16 @@ namespace TextStyles.Android
 	public class StyleManager : IDisposable
 	{
 		private Dictionary<object, ViewStyle> _views;
+		TextStyle _instance;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Occur.TextStyles.Android.StyleManager"/> class.
 		/// </summary>
-		public StyleManager ()
+		public StyleManager (TextStyle instance = null)
 		{
+			_instance = instance ?? TextStyle.Main;
 			_views = new Dictionary<object, ViewStyle> ();
-			TextStyle.Instance.StylesChanged += TextStyle_Instance_StylesChanged;
+			_instance.StylesChanged += TextStyle_Instance_StylesChanged;
 		}
 
 		/// <summary>
@@ -29,12 +31,12 @@ namespace TextStyles.Android
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
-		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
+		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
-			var target = TextStyle.Create<T> (styleID, text, customTags, useExistingStyles, encoding);
-			TextStyle.SetBaseStyle (styleID, ref customTags);
+			var target = _instance.Create<T> (styleID, text, customTags, useExistingStyles);
+			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var reference = new ViewStyle (target as TextView, text, true) {
+			var reference = new ViewStyle (_instance, target as TextView, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -55,7 +57,7 @@ namespace TextStyles.Android
 		/// <param name="encoding">String encoding type</param>
 		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
 		{
-			var viewStyle = new ViewStyle ((TextView)target, text, true) {
+			var viewStyle = new ViewStyle (_instance, (TextView)target, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -125,7 +127,7 @@ namespace TextStyles.Android
 			_views.Clear ();
 			_views = null;
 
-			TextStyle.Instance.StylesChanged -= TextStyle_Instance_StylesChanged;
+			_instance.StylesChanged -= TextStyle_Instance_StylesChanged;
 		}
 
 		void TextStyle_Instance_StylesChanged (object sender, EventArgs e)
@@ -154,8 +156,11 @@ namespace TextStyles.Android
 
 		bool _updateConstraints;
 
-		public ViewStyle (TextView target, string rawText, bool updateConstraints)
+		TextStyle _instance;
+
+		public ViewStyle (TextStyle instance, TextView target, string rawText, bool updateConstraints)
 		{
+			_instance = instance;
 			Target = target;
 			_rawText = rawText;
 			_updateConstraints = updateConstraints;
@@ -169,15 +174,15 @@ namespace TextStyles.Android
 				_rawText = value;
 			}
 
-			var style = TextStyle.GetStyle (StyleID);
+			var style = _instance.GetStyle (StyleID);
 			TextValue = _rawText;
 
-			AttributedValue = ContainsHtml ? TextStyle.CreateHtmlString (_rawText, StyleID, CustomTags) : TextStyle.CreateStyledString (style, _rawText);
+			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (_rawText, StyleID, CustomTags) : _instance.CreateStyledString (style, _rawText);
 		}
 
 		public void UpdateDisplay ()
 		{
-			TextStyle.Style (Target, StyleID, _rawText, CustomTags, true);
+			_instance.Style (Target, StyleID, _rawText, CustomTags, true);
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace TextStyles.Android
 {
 	public class CustomHtmlParser : Java.Lang.Object, IContentHandler
 	{
-		static float [] HEADER_SIZES = {
+		static float[] HEADER_SIZES = {
 			1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f,
 		};
 
@@ -33,14 +33,17 @@ namespace TextStyles.Android
 
 		static TextStyleParameters _defaultStyle;
 
+		TextStyle _instance;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:TextStyles.Android.CustomHtmlParser"/> class.
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="textStyles">Text styles.</param>
 		/// <param name="defaultStyleID">Default style identifier.</param>
-		public CustomHtmlParser (string source, Dictionary<string, TextStyleParameters> textStyles, string defaultStyleID = null)
+		public CustomHtmlParser (TextStyle instance, string source, Dictionary<string, TextStyleParameters> textStyles, string defaultStyleID = null)
 		{
+			_instance = instance;
 			_htmlSource = source;
 			_styles = textStyles;
 			_defaultStyle = String.IsNullOrEmpty (defaultStyleID) ? null : _styles [defaultStyleID];
@@ -48,7 +51,7 @@ namespace TextStyles.Android
 			_spannableStringBuilder = new SpannableStringBuilder ();
 			_reader = XMLReaderFactory.CreateXMLReader ("org.ccil.cowan.tagsoup.Parser");
 			_imageGetter = null;
-			_tagHandler = new CustomTagHandler (textStyles);
+			_tagHandler = new CustomTagHandler (_instance);
 		}
 
 		/// <summary>
@@ -69,7 +72,7 @@ namespace TextStyles.Android
 			int startIndex;
 			int endIndex;
 
-			var obj = _spannableStringBuilder.GetSpans (0, _spannableStringBuilder.Length (), Java.Lang.Class.FromType (typeof (IParagraphStyle)));
+			var obj = _spannableStringBuilder.GetSpans (0, _spannableStringBuilder.Length (), Java.Lang.Class.FromType (typeof(IParagraphStyle)));
 			for (int i = 0; i < obj.Length; i++) {
 				startIndex = _spannableStringBuilder.GetSpanStart (obj [i]);
 				endIndex = _spannableStringBuilder.GetSpanEnd (obj [i]);
@@ -77,7 +80,7 @@ namespace TextStyles.Android
 				// If the last line of the range is blank, back off by one.
 				if (endIndex - 2 >= 0) {
 					if (_spannableStringBuilder.CharAt (endIndex - 1) == '\n' &&
-						_spannableStringBuilder.CharAt (endIndex - 2) == '\n') {
+					    _spannableStringBuilder.CharAt (endIndex - 2) == '\n') {
 						endIndex--;
 					}
 				}
@@ -91,7 +94,7 @@ namespace TextStyles.Android
 
 			// loop through spans and apply text formating where needed
 			if (_defaultStyle?.TextTransform != TextStyleTextTransform.None) {
-				var allSpans = _spannableStringBuilder.GetSpans (0, _spannableStringBuilder.Length (), Java.Lang.Class.FromType (typeof (Java.Lang.Object)));
+				var allSpans = _spannableStringBuilder.GetSpans (0, _spannableStringBuilder.Length (), Java.Lang.Class.FromType (typeof(Java.Lang.Object)));
 
 				// Pre first span
 				var firstSpanIndex = (allSpans.Length > 0) ? _spannableStringBuilder.GetSpanStart (allSpans [0]) : 0;
@@ -111,7 +114,7 @@ namespace TextStyles.Android
 
 				Typeface font = null;
 				if (!string.IsNullOrEmpty (_defaultStyle.Font)) {
-					TextStyle.Instance._typeFaces.TryGetValue (_defaultStyle.Font, out font);
+					_instance._typeFaces.TryGetValue (_defaultStyle.Font, out font);
 
 					var customSpan = new CustomTypefaceSpan ("", font, _defaultStyle);
 					_spannableStringBuilder.SetSpan (customSpan, 0, _spannableStringBuilder.Length (), SpanTypes.ExclusiveExclusive);
@@ -129,7 +132,7 @@ namespace TextStyles.Android
 		/// <param name="style">Style.</param>
 		/// <param name="startIndex">Start index.</param>
 		/// <param name="endIndex">End index.</param>
-		static void TransformTextRange (SpannableStringBuilder text, TextStyleParameters style, int startIndex, int endIndex)
+		void TransformTextRange (SpannableStringBuilder text, TextStyleParameters style, int startIndex, int endIndex)
 		{
 			if (startIndex == endIndex)
 				return;
@@ -189,8 +192,8 @@ namespace TextStyles.Android
 			} else if (String.Equals (tag, "sub", StringComparison.OrdinalIgnoreCase)) {
 				start (_spannableStringBuilder, new Sub ());
 			} else if (tag.Length == 2 &&
-					   Char.ToLower (tag [0]) == 'h' &&
-					   tag [1] >= '1' && tag [1] <= '6') {
+			           Char.ToLower (tag [0]) == 'h' &&
+			           tag [1] >= '1' && tag [1] <= '6') {
 				handleP (_spannableStringBuilder);
 				//				start (mSpannableStringBuilder, new Header (tag [1] - '1'));
 			} else if (String.Equals (tag, "img", StringComparison.OrdinalIgnoreCase)) {
@@ -214,39 +217,39 @@ namespace TextStyles.Android
 			} else if (String.Equals (tag, "div", StringComparison.OrdinalIgnoreCase)) {
 				handleP (_spannableStringBuilder);
 			} else if (String.Equals (tag, "strong", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Bold)), new StyleSpan (TypefaceStyle.Bold));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Bold)), new StyleSpan (TypefaceStyle.Bold));
 			} else if (String.Equals (tag, "b", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Bold)), new StyleSpan (TypefaceStyle.Bold));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Bold)), new StyleSpan (TypefaceStyle.Bold));
 			} else if (String.Equals (tag, "em", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Italic)), new StyleSpan (TypefaceStyle.Italic));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Italic)), new StyleSpan (TypefaceStyle.Italic));
 			} else if (String.Equals (tag, "cite", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Italic)), new StyleSpan (TypefaceStyle.Italic));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Italic)), new StyleSpan (TypefaceStyle.Italic));
 			} else if (String.Equals (tag, "dfn", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Italic)), new StyleSpan (TypefaceStyle.Italic));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Italic)), new StyleSpan (TypefaceStyle.Italic));
 			} else if (String.Equals (tag, "i", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Italic)), new StyleSpan (TypefaceStyle.Italic));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Italic)), new StyleSpan (TypefaceStyle.Italic));
 			} else if (String.Equals (tag, "big", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Big)), new RelativeSizeSpan (1.25f));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Big)), new RelativeSizeSpan (1.25f));
 			} else if (String.Equals (tag, "small", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Small)), new RelativeSizeSpan (0.8f));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Small)), new RelativeSizeSpan (0.8f));
 			} else if (String.Equals (tag, "font", StringComparison.OrdinalIgnoreCase)) {
 				endFont (_spannableStringBuilder);
 			} else if (String.Equals (tag, "blockquote", StringComparison.OrdinalIgnoreCase)) {
 				handleP (_spannableStringBuilder);
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Blockquote)), new QuoteSpan ());
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Blockquote)), new QuoteSpan ());
 			} else if (String.Equals (tag, "tt", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Monospace)), new TypefaceSpan ("monospace"));
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Monospace)), new TypefaceSpan ("monospace"));
 			} else if (String.Equals (tag, "a", StringComparison.OrdinalIgnoreCase)) {
 				endA (_spannableStringBuilder);
 			} else if (String.Equals (tag, "u", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Underline)), new UnderlineSpan ());
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Underline)), new UnderlineSpan ());
 			} else if (String.Equals (tag, "sup", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Super)), new SuperscriptSpan ());
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Super)), new SuperscriptSpan ());
 			} else if (String.Equals (tag, "sub", StringComparison.OrdinalIgnoreCase)) {
-				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof (Sub)), new SubscriptSpan ());
+				end (_spannableStringBuilder, Java.Lang.Class.FromType (typeof(Sub)), new SubscriptSpan ());
 			} else if (tag.Length == 2 &&
-					   Char.ToLower (tag [0]) == 'h' &&
-					   Char.ToLower (tag [1]) >= '1' && Char.ToLower (tag [1]) <= '6') {
+			           Char.ToLower (tag [0]) == 'h' &&
+			           Char.ToLower (tag [1]) >= '1' && Char.ToLower (tag [1]) <= '6') {
 				handleP (_spannableStringBuilder);
 				endHeader (_spannableStringBuilder);
 			}
@@ -295,7 +298,7 @@ namespace TextStyles.Android
 		 * This knows that the last returned object from getSpans()
 		 * will be the most recently added.
 		 */
-			Java.Lang.Object [] objs = text.GetSpans (0, text.Length (), kind);
+			Java.Lang.Object[] objs = text.GetSpans (0, text.Length (), kind);
 
 			if (objs.Length == 0) {
 				return null;
@@ -392,7 +395,7 @@ namespace TextStyles.Android
 		static void endFont (SpannableStringBuilder text)
 		{
 			int len = text.Length ();
-			var obj = getLast (text, Java.Lang.Class.FromType (typeof (Font)));
+			var obj = getLast (text, Java.Lang.Class.FromType (typeof(Font)));
 			int where = text.GetSpanStart (obj);
 
 			text.RemoveSpan (obj);
@@ -451,7 +454,7 @@ namespace TextStyles.Android
 		static void endA (SpannableStringBuilder text)
 		{
 			int len = text.Length ();
-			var obj = getLast (text, Java.Lang.Class.FromType (typeof (Href)));
+			var obj = getLast (text, Java.Lang.Class.FromType (typeof(Href)));
 			int where = text.GetSpanStart (obj);
 
 			text.RemoveSpan (obj);
@@ -474,7 +477,7 @@ namespace TextStyles.Android
 		static void endHeader (SpannableStringBuilder text)
 		{
 			int len = text.Length ();
-			var obj = getLast (text, Java.Lang.Class.FromType (typeof (Header)));
+			var obj = getLast (text, Java.Lang.Class.FromType (typeof(Header)));
 			int where = text.GetSpanStart (obj);
 
 			text.RemoveSpan (obj);
@@ -530,7 +533,7 @@ namespace TextStyles.Android
 			handleEndTag (localName);
 		}
 
-		public void Characters (char [] ch, int start, int length)
+		public void Characters (char[] ch, int start, int length)
 		{
 			StringBuilder sb = new StringBuilder ();
 
@@ -569,7 +572,7 @@ namespace TextStyles.Android
 			_spannableStringBuilder.Append (sb.ToString ());
 		}
 
-		public void IgnorableWhitespace (char [] ch, int start, int length)
+		public void IgnorableWhitespace (char[] ch, int start, int length)
 		{
 		}
 

@@ -7,12 +7,22 @@ namespace Android.Widget
 	{
 		public static void Style (this TextView target, string cssSelector, string text = null)
 		{
-			TextStyle.Style<TextView> (target, cssSelector, text);
+			TextStyle.Main.Style<TextView> (target, cssSelector, text);
+		}
+
+		public static void Style (this TextView target, string instanceID, string cssSelector, string text = null)
+		{
+			TextStyle.Instances [instanceID]?.Style<TextView> (target, cssSelector, text);
 		}
 
 		public static void Style (this EditText target, string cssSelector, string text = null)
 		{
-			TextStyle.Style<EditText> (target, cssSelector, text);
+			TextStyle.Main.Style<EditText> (target, cssSelector, text);
+		}
+
+		public static void Style (this EditText target, string instanceID, string cssSelector, string text = null)
+		{
+			TextStyle.Instances [instanceID]?.Style<EditText> (target, cssSelector, text);
 		}
 	}
 }

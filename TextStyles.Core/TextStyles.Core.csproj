@@ -42,6 +42,7 @@
     <Compile Include="TextStyleParameters.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="ITextStyle.cs" />
+    <Compile Include="TextStyleBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

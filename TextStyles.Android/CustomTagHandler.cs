@@ -11,11 +11,11 @@ namespace TextStyles.Android
 {
 	public class CustomTagHandler : Java.Lang.Object, Html.ITagHandler
 	{
-		Dictionary<string, TextStyleParameters> _textStyles;
+		TextStyle _instance;
 
-		public CustomTagHandler (Dictionary<string, TextStyleParameters> textStyles)
+		public CustomTagHandler (TextStyle instance)
 		{
-			_textStyles = textStyles;
+			_instance = instance;
 		}
 
 		#region ITagHandler implementation
@@ -30,10 +30,10 @@ namespace TextStyles.Android
 		/// <param name="xmlReader">IXMLReader</param>
 		public void HandleTag (bool opening, string tag, IEditable output, Org.Xml.Sax.IXMLReader xmlReader)
 		{
-			TextStyleParameters style;
+			TextStyleParameters style = _instance.GetStyle (tag);
 
 			// Body overwrites the inline styles so we set that at the textview level
-			if (_textStyles.TryGetValue (tag, out style)) {
+			if (style != null) {
 				var text = output as SpannableStringBuilder;
 
 				if (opening) {
@@ -42,11 +42,11 @@ namespace TextStyles.Android
 					// Retrieve font
 					Typeface font = null;
 					if (!string.IsNullOrEmpty (style.Font)) {
-						TextStyle.Instance._typeFaces.TryGetValue (style.Font, out font);
+						_instance._typeFaces.TryGetValue (style.Font, out font);
 					}
 
 					var customSpan = new CustomTypefaceSpan ("", font, style);
-					End (style, text, Class.FromType (typeof (TextStylesObject)), customSpan);
+					End (style, text, Class.FromType (typeof(TextStylesObject)), customSpan);
 				}
 			}
 		}

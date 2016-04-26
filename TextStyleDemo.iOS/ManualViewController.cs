@@ -26,19 +26,19 @@ namespace TextStyleDemo.iOS
 			var frame = View.Frame;
 
 			// Create a heading using the "h1" css style
-			_heading = TextStyle.Create<UILabel> ("h1", "Hello World");
+			_heading = TextStyle.Main.Create<UILabel> ("h1", "Hello World");
 			var headingFrame = _heading.Frame = new CGRect (20f, 120f, frame.Width - 40f, 60f);
 			Add (_heading);
 
 			// Create a subheading using the "h2" css style with a custom tag
-			_subtitle = TextStyle.Create<UILabel> ("h2", "This is a <spot>subtitle</spot>", new List<CssTagStyle> () {
+			_subtitle = TextStyle.Main.Create<UILabel> ("h2", "This is a <spot>subtitle</spot>", new List<CssTagStyle> () {
 				new CssTagStyle ("spot"){ CSS = "spot{color:" + Colors.SpotColor.ToHex () + "}" }
 			});
 			var subtitleFrame = _subtitle.Frame = new CGRect (headingFrame.X, headingFrame.Bottom, headingFrame.Width, 40f);
 			Add (_subtitle);
 
 			// Create a text entry field
-			_textEntry = TextStyle.Create<UITextField> ("body");
+			_textEntry = TextStyle.Main.Create<UITextField> ("body");
 			_textEntry.Frame = new CGRect (subtitleFrame.X, subtitleFrame.Bottom, subtitleFrame.Width, 40);
 			_textEntry.Layer.BorderColor = Colors.Grey.CGColor;
 			_textEntry.Layer.BorderWidth = .5f;

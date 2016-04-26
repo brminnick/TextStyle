@@ -8,17 +8,32 @@ namespace UIKit
 		// style an existing UILabel
 		public static void Style (this UILabel target, string cssSelector, string text = null)
 		{
-			TextStyle.Style<UILabel> (target, cssSelector, text);
+			TextStyle.Main.Style<UILabel> (target, cssSelector, text);
+		}
+
+		public static void Style (this UILabel target, string instanceID, string cssSelector, string text = null)
+		{
+			TextStyle.Instances [instanceID]?.Style<UILabel> (target, cssSelector, text);
 		}
 
 		public static void Style (this UITextField target, string cssSelector, string text = null)
 		{
-			TextStyle.Style<UITextField> (target, cssSelector, text);
+			TextStyle.Main.Style<UITextField> (target, cssSelector, text);
+		}
+
+		public static void Style (this UITextField target, string instanceID, string cssSelector, string text = null)
+		{
+			TextStyle.Instances [instanceID]?.Style<UITextField> (target, cssSelector, text);
 		}
 
 		public static void Style (this UITextView target, string cssSelector, string text = null)
 		{
-			TextStyle.Style<UITextView> (target, cssSelector, text);
+			TextStyle.Main.Style<UITextView> (target, cssSelector, text);
+		}
+
+		public static void Style (this UITextView target, string instanceID, string cssSelector, string text = null)
+		{
+			TextStyle.Instances [instanceID]?.Style<UITextView> (target, cssSelector, text);
 		}
 	}
 }
