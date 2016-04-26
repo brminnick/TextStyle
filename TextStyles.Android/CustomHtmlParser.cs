@@ -46,12 +46,15 @@ namespace TextStyles.Android
 			_instance = instance;
 			_htmlSource = source;
 			_styles = textStyles;
-			_defaultStyle = String.IsNullOrEmpty (defaultStyleID) ? null : _styles [defaultStyleID];
+
+			if (!String.IsNullOrEmpty (defaultStyleID) && _styles.ContainsKey (defaultStyleID)) {
+				_defaultStyle = _styles [defaultStyleID];
+			}
 
 			_spannableStringBuilder = new SpannableStringBuilder ();
 			_reader = XMLReaderFactory.CreateXMLReader ("org.ccil.cowan.tagsoup.Parser");
 			_imageGetter = null;
-			_tagHandler = new CustomTagHandler (_instance);
+			_tagHandler = new CustomTagHandler (_instance, _styles);
 		}
 
 		/// <summary>

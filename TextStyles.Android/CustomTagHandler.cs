@@ -12,10 +12,12 @@ namespace TextStyles.Android
 	public class CustomTagHandler : Java.Lang.Object, Html.ITagHandler
 	{
 		TextStyle _instance;
+		Dictionary<string, TextStyleParameters> _styles;
 
-		public CustomTagHandler (TextStyle instance)
+		public CustomTagHandler (TextStyle instance, Dictionary<string, TextStyleParameters> textStyles)
 		{
 			_instance = instance;
+			_styles = textStyles;
 		}
 
 		#region ITagHandler implementation
@@ -30,7 +32,7 @@ namespace TextStyles.Android
 		/// <param name="xmlReader">IXMLReader</param>
 		public void HandleTag (bool opening, string tag, IEditable output, Org.Xml.Sax.IXMLReader xmlReader)
 		{
-			TextStyleParameters style = _instance.GetStyle (tag);
+			TextStyleParameters style = _styles.ContainsKey (tag) ? _styles [tag] : null;
 
 			// Body overwrites the inline styles so we set that at the textview level
 			if (style != null) {
