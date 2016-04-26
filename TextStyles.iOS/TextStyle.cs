@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace TextStyles.iOS
 {
-	public class TextStyle
+	public class TextStyle:ITextStyle
 	{
 		#region Parameters
 
@@ -19,9 +19,9 @@ namespace TextStyles.iOS
 
 		public event EventHandler StylesChanged;
 
-		internal static Type typeLabel = typeof (UILabel);
-		internal static Type typeTextView = typeof (UITextView);
-		internal static Type typeTextField = typeof (UITextField);
+		internal static Type typeLabel = typeof(UILabel);
+		internal static Type typeTextView = typeof(UITextView);
+		internal static Type typeTextField = typeof(UITextField);
 
 		static TextStyle instance = null;
 		static readonly object padlock = new object ();
@@ -31,7 +31,7 @@ namespace TextStyles.iOS
 		#endregion
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Occur.TextStyles.iOS.TextStyle"/> class.
+		/// Initializes a new instance of the <see cref="TextStyles.iOS,TextStyle"/> class.
 		/// </summary>
 		TextStyle ()
 		{
@@ -92,7 +92,7 @@ namespace TextStyles.iOS
 		/// <param name="customTags">A list of custom <c>CSSTagStyle</c> instances that set the styling for the html</param>
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
-		public static NSAttributedString CreateHtmlString (string text, List<CssTagStyle> customTags = null, bool useExistingStyles = true, NSStringEncoding encoding = NSStringEncoding.UTF8)
+		public static NSAttributedString CreateHtmlString (string text, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
 			var error = new NSError ();
 
@@ -100,7 +100,7 @@ namespace TextStyles.iOS
 
 			var stringAttribs = new NSAttributedStringDocumentAttributes {
 				DocumentType = NSDocumentType.HTML,
-				StringEncoding = encoding
+				StringEncoding = NSStringEncoding.UTF8
 			};
 
 			var htmlString = new NSAttributedString (text, stringAttribs, ref error);
@@ -194,7 +194,7 @@ namespace TextStyles.iOS
 				TextStyle.CreateHtmlString (text, customTags, useExistingStyles) :
 				TextStyle.CreateStyledString (styleID, text);
 
-			var type = typeof (T);
+			var type = typeof(T);
 			if (type == typeLabel) {
 				var label = target as UILabel;
 				label.AttributedText = formattedText;
@@ -230,7 +230,7 @@ namespace TextStyles.iOS
 		public static void Style<T> (T target, string styleID, string text = null)
 		{
 			var style = GetStyle (styleID);
-			var type = typeof (T);
+			var type = typeof(T);
 
 			if (type == typeLabel) {
 				var label = target as UILabel;

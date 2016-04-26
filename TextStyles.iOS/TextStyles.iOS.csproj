@@ -47,6 +47,8 @@
     <Compile Include="StyleManager.cs" />
     <Compile Include="TextStyle.cs" />
     <Compile Include="TextUtils.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="UILabelExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

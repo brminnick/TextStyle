@@ -13,7 +13,7 @@ using Android.Views;
 
 namespace TextStyles.Android
 {
-	public class TextStyle
+	public class TextStyle:ITextStyle
 	{
 		#region Parameters
 
@@ -24,8 +24,8 @@ namespace TextStyles.Android
 
 		public event EventHandler StylesChanged;
 
-		internal static Type typeTextView = typeof (TextView);
-		internal static Type typeEditText = typeof (EditText);
+		internal static Type typeTextView = typeof(TextView);
+		internal static Type typeEditText = typeof(EditText);
 
 		static TextStyle instance = null;
 		static readonly object padlock = new object ();
@@ -234,7 +234,7 @@ namespace TextStyles.Android
 		public static void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
 		{
 			var style = GetStyle (styleID);
-			var type = typeof (T);
+			var type = typeof(T);
 			var isHTML = (!string.IsNullOrEmpty (text) && Common.MatchHtmlTags.IsMatch (text));
 			var textView = (type == typeTextView) ? target as TextView : target as EditText;
 
