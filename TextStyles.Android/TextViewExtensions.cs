@@ -10,9 +10,9 @@ namespace Android.Widget
 			TextStyle.Main.Style<TextView> (target, cssSelector, text);
 		}
 
-		public static void Style (this TextView target, string instanceID, string cssSelector, string text = null)
+		public static void Style (this TextView target, TextStyle instance, string cssSelector, string text = null)
 		{
-			TextStyle.Instances [instanceID]?.Style<TextView> (target, cssSelector, text);
+			instance.Style<TextView> (target, cssSelector, text);
 		}
 
 		public static void Style (this EditText target, string cssSelector, string text = null)
@@ -20,9 +20,9 @@ namespace Android.Widget
 			TextStyle.Main.Style<EditText> (target, cssSelector, text);
 		}
 
-		public static void Style (this EditText target, string instanceID, string cssSelector, string text = null)
+		public static void Style (this EditText target, TextStyle instance, string cssSelector, string text = null)
 		{
-			TextStyle.Instances [instanceID]?.Style<EditText> (target, cssSelector, text);
+			instance.Style<EditText> (target, cssSelector, text);
 		}
 	}
 }

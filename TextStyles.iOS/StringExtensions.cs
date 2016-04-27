@@ -15,9 +15,9 @@ namespace System
 			return TextStyle.Main.CreateHtmlString (target, customStyles, useExisting);
 		}
 
-		public static NSAttributedString ToAttributedString (this string target, string instanceID, List<CssTagStyle> customStyles = null, bool useExisting = true)
+		public static NSAttributedString ToAttributedString (this string target, TextStyle instance, List<CssTagStyle> customStyles = null, bool useExisting = true)
 		{
-			return TextStyle.Instances [instanceID]?.CreateHtmlString (target, customStyles, useExisting);
+			return instance.CreateHtmlString (target, customStyles, useExisting);
 		}
 	}
 }

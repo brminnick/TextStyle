@@ -15,9 +15,9 @@ namespace System
 			return TextStyle.Main.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
 		}
 
-		public static ISpanned ToSpannedString (this string target, string instanceID, string defaultStyle, List<CssTagStyle> customStyles = null, bool useExisting = true)
+		public static ISpanned ToSpannedString (this string target, TextStyle instance, string defaultStyle, List<CssTagStyle> customStyles = null, bool useExisting = true)
 		{
-			return TextStyle.Instances [instanceID]?.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
+			return instance.CreateHtmlString (target, defaultStyle, customStyles, useExisting);
 		}
 	}
 }

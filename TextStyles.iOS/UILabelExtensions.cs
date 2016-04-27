@@ -11,9 +11,9 @@ namespace UIKit
 			TextStyle.Main.Style<UILabel> (target, cssSelector, text);
 		}
 
-		public static void Style (this UILabel target, string instanceID, string cssSelector, string text = null)
+		public static void Style (this UILabel target, TextStyle instance, string cssSelector, string text = null)
 		{
-			TextStyle.Instances [instanceID]?.Style<UILabel> (target, cssSelector, text);
+			instance.Style<UILabel> (target, cssSelector, text);
 		}
 
 		public static void Style (this UITextField target, string cssSelector, string text = null)
@@ -21,9 +21,9 @@ namespace UIKit
 			TextStyle.Main.Style<UITextField> (target, cssSelector, text);
 		}
 
-		public static void Style (this UITextField target, string instanceID, string cssSelector, string text = null)
+		public static void Style (this UITextField target, TextStyle instance, string cssSelector, string text = null)
 		{
-			TextStyle.Instances [instanceID]?.Style<UITextField> (target, cssSelector, text);
+			instance.Style<UITextField> (target, cssSelector, text);
 		}
 
 		public static void Style (this UITextView target, string cssSelector, string text = null)
@@ -31,9 +31,9 @@ namespace UIKit
 			TextStyle.Main.Style<UITextView> (target, cssSelector, text);
 		}
 
-		public static void Style (this UITextView target, string instanceID, string cssSelector, string text = null)
+		public static void Style (this UITextView target, TextStyle instance, string cssSelector, string text = null)
 		{
-			TextStyle.Instances [instanceID]?.Style<UITextView> (target, cssSelector, text);
+			instance.Style<UITextView> (target, cssSelector, text);
 		}
 	}
 }

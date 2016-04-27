@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>TextStyleTouchDemo</string>
+	<string>TextStyle</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.xamarin.textstyletouchdemo</string>
 	<key>CFBundleShortVersionString</key>

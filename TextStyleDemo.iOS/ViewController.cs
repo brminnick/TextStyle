@@ -21,6 +21,9 @@ namespace TextStyleDemo.iOS
 		UIView _divider;
 		bool _isFirstStyleSheet = true;
 
+		Dictionary<string, TextStyleParameters> _parsedStylesOne;
+		Dictionary<string, TextStyleParameters> _parsedStylesTwo;
+
 		public ViewController (IntPtr handle) : base (handle)
 		{
 		}
@@ -31,24 +34,26 @@ namespace TextStyleDemo.iOS
 
 			//TextUtils.ListFontNames ("open");
 
-			// Load the CSS file
-			var style = File.ReadAllText ("StyleOne.css");
-			TextStyle.Main.SetCSS (style);
+			_parsedStylesOne = CssTextStyleParser.Parse (File.ReadAllText ("StyleOne.css"));
+			_parsedStylesTwo = CssTextStyleParser.Parse (File.ReadAllText ("StyleTwo.css"));
+			TextStyle.Main.SetStyles (_parsedStylesOne);
 
 			// TEMP
 			var stopwatch = Stopwatch.StartNew ();
 
 			// Create a StyleManager to handle any CSS changes automatically
 			_styleManager = new StyleManager ();
+			_styleManager.Add (labelOne, "h2", headingOne);
 			_styleManager.Add (labelTwo, "h1", headingTwo);
 			_styleManager.Add (labelThree, "h2", headingThree, new List<CssTagStyle> {
 				new CssTagStyle ("spot"){ CSS = "spot{color:" + Colors.SpotColor.ToHex () + "}" }
 			});
 			_styleManager.Add (body, "body", textBody);
 
-			Console.WriteLine ("Elapsed time {0}", stopwatch.ElapsedMilliseconds);
+			// Using extension methods
+			//body.AttributedText = "Hello world <b>this is a test</b>".ToAttributedString ();
 
-			TextStyle.Main.Style<UILabel> (labelOne, "h2", headingOne);
+			Console.WriteLine ("Elapsed time {0}", stopwatch.ElapsedMilliseconds);
 
 			AddUIElements ();
 		}
@@ -67,11 +72,10 @@ namespace TextStyleDemo.iOS
 			var button = new SwapButton ();
 			button.Frame = new CGRect (frame.Width / 2 - SwapButton.SIZE * 2, frame.Height - SwapButton.SIZE * 1.5f, SwapButton.SIZE, SwapButton.SIZE);
 			button.TouchUpInside += (sender, e) => {
-				var cssFileName = _isFirstStyleSheet ? "StyleTwo.css" : "StyleOne.css";
-				var css = File.ReadAllText (cssFileName);
+				var styles = _isFirstStyleSheet ? _parsedStylesTwo : _parsedStylesOne;
+				TextStyle.Main.SetStyles (styles);
 
 				_isFirstStyleSheet = !_isFirstStyleSheet;
-				TextStyle.Main.SetCSS (css);
 			};
 			Add (button);
 
@@ -80,17 +84,11 @@ namespace TextStyleDemo.iOS
 			nextPageButton.Frame = new CGRect (frame.Width / 2 + SwapButton.SIZE, frame.Height - SwapButton.SIZE * 1.5f, SwapButton.SIZE, SwapButton.SIZE);
 			nextPageButton.TouchUpInside += (sender, e) => NavigationController.PushViewController (new ManualViewController (), true);
 			Add (nextPageButton);
-
-			//nextPageButton.TouchUpInside += (sender, e) => {
-			//	labelOne.Text = "Lorem Ispum";
-			//};
-
 		}
 
 		public override void ViewDidLayoutSubviews ()
 		{
 			base.ViewDidLayoutSubviews ();
-
 			_divider.Frame = new CGRect (0, body.Frame.Y, View.Frame.Width, 1.0 / UIScreen.MainScreen.Scale);
 		}
 

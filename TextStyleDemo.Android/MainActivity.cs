@@ -19,11 +19,10 @@ namespace TextStyleDemo.Android
 		const string headingThree = @"Is that little <spot>extra</spot>";
 		const string textBody = @"Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<p>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.</p>";
 
-		StyleManager _styleManager;
-		string _cssOne;
-		string _cssTwo;
-
 		bool _isFirstStyleSheet = true;
+		StyleManager _styleManager;
+		Dictionary<string, TextStyleParameters> _parsedStylesOne;
+		Dictionary<string, TextStyleParameters> _parsedStylesTwo;
 
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
@@ -31,9 +30,6 @@ namespace TextStyleDemo.Android
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
-
-			_cssOne = OpenCSSFile ("StyleOne.css");
-			_cssTwo = OpenCSSFile ("StyleTwo.css");
 
 			TextStyle.Main.AddFont ("Archistico", "Archistico_Simple.ttf");
 			TextStyle.Main.AddFont ("Avenir-Medium", "Avenir-Medium.ttf");
@@ -43,7 +39,9 @@ namespace TextStyleDemo.Android
 			TextStyle.Main.AddFont ("OpenSans-CondBold", "OpenSans-CondBold.ttf");
 			TextStyle.Main.AddFont ("OpenSans-CondLight", "OpenSans-CondLight.ttf");
 
-			TextStyle.Main.SetCSS (_cssOne);
+			_parsedStylesOne = CssTextStyleParser.Parse (OpenCSSFile ("StyleOne.css"));
+			_parsedStylesTwo = CssTextStyleParser.Parse (OpenCSSFile ("StyleTwo.css"));
+			TextStyle.Main.SetStyles (_parsedStylesOne);
 
 			var labelOne = FindViewById<TextView> (Resource.Id.labelOne);
 			var labelTwo = FindViewById<TextView> (Resource.Id.labelTwo);
@@ -62,11 +60,10 @@ namespace TextStyleDemo.Android
 			var toggleButton = FindViewById<ImageButton> (Resource.Id.refreshIcon);
 			toggleButton.SetBackgroundColor (Color.Transparent);
 			toggleButton.Click += (sender, e) => {
-				Console.WriteLine ("Toggled");
+				var styles = _isFirstStyleSheet ? _parsedStylesTwo : _parsedStylesOne;
+				TextStyle.Main.SetStyles (styles);
 
-				var css = _isFirstStyleSheet ? _cssTwo : _cssOne;
 				_isFirstStyleSheet = !_isFirstStyleSheet;
-				TextStyle.Main.SetCSS (css);
 			};
 		}
 
