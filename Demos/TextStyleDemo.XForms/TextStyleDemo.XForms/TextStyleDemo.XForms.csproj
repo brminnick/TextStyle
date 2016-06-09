@@ -55,6 +55,13 @@
       <Project>{E838E569-ACBC-4E50-9A97-10FC51F2EA2D}</Project>
       <Name>TextStyles.XForms.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\TextStyles.Native\TextStyles.Core\TextStyles.Core.csproj">
+      <Project>{D511DFCF-6B36-431D-9381-BF05DFB965E3}</Project>
+      <Name>TextStyles.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StyleOne.css" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\..\packages\Xamarin.Forms.2.0.1.6495\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\..\packages\Xamarin.Forms.2.0.1.6495\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

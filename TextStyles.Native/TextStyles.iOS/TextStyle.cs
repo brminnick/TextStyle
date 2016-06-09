@@ -8,34 +8,23 @@ using System.Linq;
 
 namespace TextStyles.iOS
 {
-	public class TextStyle:TextStyleBase, ITextStyle
+	public class TextStyle : TextStyleBase, ITextStyle
 	{
 		#region Parameters
 
-		public static Dictionary<string, TextStyle> Instances{ get { return _instances; } }
+		public static Dictionary<string, ITextStyle> Instances { get { return _instances; } }
 
-		static Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
-		static readonly object padlock = new object ();
-
-		internal static Type typeLabel = typeof(UILabel);
-		internal static Type typeTextView = typeof(UITextView);
-		internal static Type typeTextField = typeof(UITextField);
-
-		public static TextStyle CreateInstance (string id)
-		{
-			lock (padlock) {
-				_instances [id] = new TextStyle ();
-				return _instances [id];
-			}
-		}
+		internal static Type typeLabel = typeof (UIKit.UILabel);
+		internal static Type typeTextView = typeof (UIKit.UITextView);
+		internal static Type typeTextField = typeof (UIKit.UITextField);
 
 		public static TextStyle Main {
 			get {
 				lock (padlock) {
 					if (!_instances.ContainsKey (MainID)) {
-						_instances [MainID] = new TextStyle ();
+						_instances [MainID] = new TextStyle (MainID);
 					}
-					return _instances [MainID];
+					return _instances [MainID] as TextStyle;
 				}
 			}
 		}
@@ -45,9 +34,14 @@ namespace TextStyles.iOS
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextStyles.iOS,TextStyle"/> class.
 		/// </summary>
-		TextStyle ()
+		public TextStyle (string id) : base (id)
 		{
-			
+			_instances [this.Id] = this;
+		}
+
+		public TextStyle () : base (MainID)
+		{
+			_instances [this.Id] = this;
 		}
 
 		#region Public Methods
@@ -123,40 +117,14 @@ namespace TextStyles.iOS
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
 		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
-			var isHTML = (!string.IsNullOrEmpty (text) && Common.MatchHtmlTags.IsMatch (text));
 			var target = Activator.CreateInstance<T> ();
-
-			// If this is a plain string view, style it and return it
-			if (!string.IsNullOrEmpty (text) && !isHTML) {
-				Style<T> (target, styleID, text);
-				return target;
-			} else if (isHTML) {
-				SetBaseStyle (styleID, ref customTags);
-			}
-
-			var formattedText = isHTML ?
-				CreateHtmlString (text, customTags, useExistingStyles) :
-				CreateStyledString (styleID, text);
-
-			var type = typeof(T);
+			var type = typeof (T);
 			if (type == typeLabel) {
-				var label = target as UILabel;
-				label.AttributedText = formattedText;
-				if (!isHTML)
-					StyleUILabel (label, GetStyle (styleID), true);
-
+				StyleUILabel (target as UILabel, styleID, text, customTags, useExistingStyles, true);
 			} else if (type == typeTextView) {
-				var textView = target as UITextView;
-				textView.AttributedText = formattedText;
-				if (!isHTML)
-					StyleUITextView (textView, GetStyle (styleID), true);
-
+				StyleUITextView (target as UITextView, styleID, text, customTags, useExistingStyles, true);
 			} else if (type == typeTextField) {
-				var textField = target as UITextField;
-				textField.AttributedText = formattedText;
-				if (!isHTML)
-					StyleUITextField (textField, GetStyle (styleID), true);
-
+				StyleUITextField (target as UITextField, styleID, text, customTags, useExistingStyles, true);
 			} else {
 				throw new NotSupportedException ("The specified type is not supported, please use a UILabel, UITextView or UITextField: " + type.ToString ());
 			}
@@ -171,46 +139,35 @@ namespace TextStyles.iOS
 		/// <param name="styleID">The CSS selector name for the style</param>
 		/// <param name="text">Text to display</param>
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
-		public void Style<T> (T target, string styleID, string text = null)
+		public void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true)
 		{
-			var style = GetStyle (styleID);
-			var type = typeof(T);
-
+			var type = target.GetType ();
 			if (type == typeLabel) {
-				var label = target as UILabel;
-				label.AttributedText = ParseHtmlString (style, text ?? label.Text);
-				StyleUILabel (label, style, false);
-
+				StyleUILabel (target as UILabel, styleID, text, customTags, useExistingStyles, true);
 			} else if (type == typeTextView) {
-				var textView = target as UITextView;
-				textView.AttributedText = ParseHtmlString (style, text ?? textView.Text);
-				StyleUITextView (textView, style, false);
-
+				StyleUITextView (target as UITextView, styleID, text, customTags, useExistingStyles, true);
 			} else if (type == typeTextField) {
-				var textField = target as UITextField;
-				textField.AttributedText = ParseHtmlString (style, text ?? textField.Text);
-				StyleUITextField (textField, style, false);
-
+				StyleUITextField (target as UITextField, styleID, text, customTags, useExistingStyles, true);
 			} else {
 				throw new NotSupportedException ("The specified type is not supported, please use a UILabel, UITextView or UITextField: " + type.ToString ());
 			}
 		}
 
-		#endregion
-
-		#region Private Methods
-
-		static void UpdateMargins (TextStyleParameters style, ref UIEdgeInsets inset)
+		// Style a UILable
+		public void StyleUILabel (UILabel target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
 		{
-			inset.Top = (style.PaddingTop > float.MinValue) ? style.PaddingTop : inset.Top;
-			inset.Bottom = (style.PaddingBottom > float.MinValue) ? style.PaddingBottom : inset.Bottom;
-			inset.Left = (style.PaddingLeft > float.MinValue) ? style.PaddingLeft : inset.Left;
-			inset.Right = (style.PaddingRight > float.MinValue) ? style.PaddingRight : inset.Right;
-		}
+			var style = GetStyle (styleID);
+			text = text ?? target.Text;
 
-		internal void StyleUILabel (UILabel target, TextStyleParameters style, bool setFonts)
-		{
-			// TODO fix this as its not helping as it stands
+			if (IsHtml (text)) {
+				SetBaseStyle (style.Name, ref customTags);
+				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
+				return;
+			}
+
+			target.AttributedText = CreateStyledString (style, text);
+
+			//-------------------------
 			var attribs = GetStringAttributes (style, DefaultTextSize);
 			target.TextColor = attribs.ForegroundColor;
 
@@ -241,8 +198,21 @@ namespace TextStyles.iOS
 			}
 		}
 
-		internal void StyleUITextView (UITextView target, TextStyleParameters style, bool setFonts)
+		// Style a UITextView
+		public void StyleUITextView (UITextView target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
 		{
+			var style = GetStyle (styleID);
+			text = text ?? target.Text;
+
+			if (IsHtml (text)) {
+				SetBaseStyle (style.Name, ref customTags);
+				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
+				return;
+			}
+
+			target.AttributedText = CreateStyledString (style, text);
+
+			//-------------------------
 			var attribs = GetStringAttributes (style, DefaultTextSize);
 			target.Font = attribs.Font;
 
@@ -265,8 +235,21 @@ namespace TextStyles.iOS
 			}
 		}
 
-		internal void StyleUITextField (UITextField target, TextStyleParameters style, bool setFonts)
+		// Style a UITextField
+		public void StyleUITextField (UITextField target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
 		{
+			var style = GetStyle (styleID);
+			text = text ?? target.Text;
+
+			if (IsHtml (text)) {
+				SetBaseStyle (style.Name, ref customTags);
+				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
+				return;
+			}
+
+			target.AttributedText = CreateStyledString (style, text);
+
+			//-------------------------
 			var attribs = GetStringAttributes (style, DefaultTextSize);
 
 			target.TextColor = attribs.ForegroundColor;
@@ -286,6 +269,23 @@ namespace TextStyles.iOS
 				UpdateMargins (style, ref curInset);
 				target.LayoutMargins = curInset;
 			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		internal bool IsHtml (string text)
+		{
+			return (!string.IsNullOrEmpty (text) && Common.MatchHtmlTags.IsMatch (text));
+		}
+
+		static void UpdateMargins (TextStyleParameters style, ref UIEdgeInsets inset)
+		{
+			inset.Top = (style.PaddingTop > float.MinValue) ? style.PaddingTop : inset.Top;
+			inset.Bottom = (style.PaddingBottom > float.MinValue) ? style.PaddingBottom : inset.Bottom;
+			inset.Left = (style.PaddingLeft > float.MinValue) ? style.PaddingLeft : inset.Left;
+			inset.Right = (style.PaddingRight > float.MinValue) ? style.PaddingRight : inset.Right;
 		}
 
 		internal static UIStringAttributes GetStringAttributes (TextStyleParameters style, float defaultTextSize)

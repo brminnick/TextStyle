@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using TextStyles.Core;
 using TextStyles.XForms.Core;
 using Xamarin.Forms;
 
@@ -8,6 +12,10 @@ namespace TextStyleDemo.XForms
 	{
 		public App ()
 		{
+			var style = DependencyService.Get<ITextStyle> ();
+			var css = LoadStringAsset ("TextStyleDemo.XForms.StyleOne.css");
+			style.SetCSS (css);
+
 			// The root page of your application
 			var content = new ContentPage {
 				Title = "TextStyleDemo.XForms",
@@ -16,13 +24,44 @@ namespace TextStyleDemo.XForms
 					Children = {
 						new StyledLabel {
 							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Welcome to Xamarin Forms!"
+							Text = "The difference between",
+							CssStyle ="h2"
+						},
+						new StyledLabel {
+							HorizontalTextAlignment = TextAlignment.Center,
+							Text = "Ordinary & Extraordinary",
+							CssStyle ="h1"
+						},
+						new StyledLabel {
+							HorizontalTextAlignment = TextAlignment.Center,
+							Text = "Is that little <spot>extra</spot>",
+							CssStyle ="h2",
+							CustomTags = new List<CssTagStyle> {
+								new CssTagStyle ("spot"){ CSS = "spot{color:#ff6c00}" }
+							}
+						},
+						new StyledLabel {
+							HorizontalTextAlignment = TextAlignment.Center,
+							Text = "Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<br/><br/>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.",
+							CssStyle ="body"
 						}
 					}
 				}
 			};
 
 			MainPage = new NavigationPage (content);
+		}
+
+		string LoadStringAsset (string id)
+		{
+			var assembly = typeof (App).GetTypeInfo ().Assembly;
+			Stream stream = assembly.GetManifestResourceStream (id);
+			string text = "";
+			using (var reader = new StreamReader (stream)) {
+				text = reader.ReadToEnd ();
+			}
+
+			return text;
 		}
 
 		protected override void OnStart ()

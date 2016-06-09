@@ -8,6 +8,10 @@ namespace TextStyles.Core
 	{
 		protected static readonly string MainID = "main";
 
+		protected static readonly object padlock = new object ();
+
+		protected static Dictionary<string, ITextStyle> _instances = new Dictionary<string, ITextStyle> ();
+
 		// <summary>
 		/// The default size for text.
 		/// </summary>
@@ -15,11 +19,17 @@ namespace TextStyles.Core
 
 		public event EventHandler StylesChanged;
 
-		protected Dictionary<string, TextStyleParameters> _textStyles;
+		protected Dictionary<string, TextStyleParameters> _textStyles = new Dictionary<string, TextStyleParameters> ();
 
-		public TextStyleBase ()
+		public string Id { get; private set; }
+
+		public TextStyleBase (string id)
 		{
-			_textStyles = new Dictionary<string, TextStyleParameters> ();
+			if (_instances.ContainsKey (id)) {
+				throw new Exception ("Cannot create another instance with the id" + id);
+			}
+
+			this.Id = id;
 		}
 
 		/// <summary>
@@ -96,6 +106,11 @@ namespace TextStyles.Core
 		public void Refresh ()
 		{
 			StylesChanged?.Invoke (this, EventArgs.Empty);
+		}
+
+		public virtual void Dispose ()
+		{
+			_instances.Remove (this.Id);
 		}
 	}
 }

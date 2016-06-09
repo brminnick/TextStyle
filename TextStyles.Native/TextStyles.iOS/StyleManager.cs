@@ -8,7 +8,7 @@ namespace TextStyles.iOS
 {
 	public class StyleManager : IDisposable
 	{
-		private Dictionary<object, ViewStyle> _views;
+		Dictionary<object, ViewStyle> _views;
 		TextStyle _instance;
 
 		/// <summary>
@@ -16,7 +16,7 @@ namespace TextStyles.iOS
 		/// </summary>
 		public StyleManager (TextStyle instance = null)
 		{
-			_instance = instance ?? TextStyle.Main;
+			_instance = instance ?? (TextStyles.iOS.TextStyle)TextStyle.Main;
 			_views = new Dictionary<object, ViewStyle> ();
 			TextStyle.Main.StylesChanged += TextStyle_Instance_StylesChanged;
 		}
@@ -35,8 +35,7 @@ namespace TextStyles.iOS
 			var target = _instance.Create<T> (styleID, text, customTags, useExistingStyles);
 			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var reference = new ViewStyle (_instance, target as UIView, text, true) {
-				StyleID = styleID,
+			var reference = new ViewStyle (_instance, target as UIView, styleID, text, true) {
 				CustomTags = customTags
 			};
 
@@ -59,8 +58,7 @@ namespace TextStyles.iOS
 			// Set the base style for the field
 			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var viewStyle = new ViewStyle (_instance, (UIView)target, text, true) {
-				StyleID = styleID,
+			var viewStyle = new ViewStyle (_instance, (UIView)target, styleID, text, true) {
 				CustomTags = customTags
 			};
 
@@ -141,7 +139,7 @@ namespace TextStyles.iOS
 
 	class ViewStyle
 	{
-		public string StyleID { get; set; }
+		public string StyleID { get; private set; }
 
 		public string TextValue { get; private set; }
 
@@ -159,20 +157,20 @@ namespace TextStyles.iOS
 
 		bool _updateConstraints;
 
-		public ViewStyle (TextStyle instance, UIView target, string rawText, bool updateConstraints)
+		public ViewStyle (TextStyle instance, UIView target, string styleID, string text, bool updateConstraints)
 		{
 			_instance = instance;
 			Target = target;
-			_rawText = rawText;
+			StyleID = styleID;
 			_updateConstraints = updateConstraints;
-
-			ContainsHtml = (!String.IsNullOrEmpty (rawText) && Common.MatchHtmlTags.IsMatch (_rawText));
+			UpdateText (text);
 		}
 
 		public void UpdateText (string value = null)
 		{
 			if (!String.IsNullOrEmpty (value)) {
 				_rawText = value;
+				ContainsHtml = (!String.IsNullOrEmpty (value) && Common.MatchHtmlTags.IsMatch (value));
 			}
 
 			var style = _instance.GetStyle (StyleID);
@@ -206,27 +204,7 @@ namespace TextStyles.iOS
 
 		public void UpdateDisplay ()
 		{
-			var type = Target.GetType ();
-			var style = _instance.GetStyle (StyleID);
-
-			if (type == TextStyle.typeLabel) {
-				var label = Target as UILabel;
-				_instance.StyleUILabel (label, style, !ContainsHtml);
-				label.AttributedText = AttributedValue;
-
-			} else if (type == TextStyle.typeTextView) {
-				var textView = Target as UITextView;
-				_instance.StyleUITextView (textView, style, !ContainsHtml);
-				textView.AttributedText = AttributedValue;
-
-			} else if (type == TextStyle.typeTextField) {
-				var textField = Target as UITextField;
-				_instance.StyleUITextField (textField, style, true);
-				textField.AttributedText = AttributedValue;
-
-			} else {
-				throw new NotSupportedException ("The specified type is not supported, please use a UILabel, UITextView or UITextField: " + type.ToString ());
-			}
+			_instance.Style (Target, StyleID, _rawText, CustomTags);
 		}
 	}
 }

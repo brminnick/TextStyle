@@ -17,23 +17,20 @@ namespace TextStyles.Droid
 
 		#region Parameters
 
-		public static Dictionary<string, TextStyle> Instances { get { return _instances; } }
-
-		static Dictionary<string, TextStyle> _instances = new Dictionary<string, TextStyle> ();
-		static readonly object padlock = new object ();
+		public static Dictionary<string, ITextStyle> Instances { get { return _instances; } }
 
 		internal static Type typeTextView = typeof (TextView);
 		internal static Type typeEditText = typeof (EditText);
 
 		internal Dictionary<string, Typeface> _typeFaces;
 
-		public static TextStyle CreateInstance (string id)
-		{
-			lock (padlock) {
-				_instances [id] = new TextStyle ();
-				return _instances [id];
-			}
-		}
+		//public static TextStyle CreateInstance (string id)
+		//{
+		//	lock (padlock) {
+		//		_instances [id] = new TextStyle (id);
+		//		return _instances [id] as TextStyle;
+		//	}
+		//}
 
 		public static TextStyle Main {
 			get {
@@ -41,7 +38,7 @@ namespace TextStyles.Droid
 					if (!_instances.ContainsKey (MainID)) {
 						_instances [MainID] = new TextStyle ();
 					}
-					return _instances [MainID];
+					return _instances [MainID] as TextStyle;
 				}
 			}
 		}
@@ -51,8 +48,15 @@ namespace TextStyles.Droid
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextStyles.Android.TextStyle"/> class.
 		/// </summary>
-		TextStyle ()
+		public TextStyle () : base (MainID)
 		{
+			_instances [this.Id] = this;
+			_typeFaces = new Dictionary<string, Typeface> ();
+		}
+
+		public TextStyle (string id) : base (id)
+		{
+			_instances [this.Id] = this;
 			_typeFaces = new Dictionary<string, Typeface> ();
 		}
 
@@ -162,11 +166,6 @@ namespace TextStyles.Droid
 
 			Style (target, styleID, text);
 			return target;
-		}
-
-		public void Style<T> (T target, string styleID, string text = null)
-		{
-			Style<T> (target, styleID, text, null);
 		}
 
 		public void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true)

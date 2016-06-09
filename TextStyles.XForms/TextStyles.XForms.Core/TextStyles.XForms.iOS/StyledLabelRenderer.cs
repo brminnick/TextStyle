@@ -20,7 +20,7 @@ namespace TextStyles.XForms.iOS
 
 			if (Control != null) {
 				SetStyle ();
-				_textStyle.Style<UILabel> (Control, _styledElement.CssStyle);
+				_textStyle.Style<UILabel> (Control, _styledElement.CssStyle, null, _styledElement.CustomTags);
 			}
 		}
 
@@ -29,15 +29,17 @@ namespace TextStyles.XForms.iOS
 			base.OnElementPropertyChanged (sender, e);
 
 			if (e.PropertyName == "Text") {
-				_textStyle.Style<UILabel> (Control, _styledElement.CssStyle);
+				_textStyle.Style<UILabel> (Control, _styledElement.CssStyle, null, _styledElement.CustomTags);
 			}
 		}
 
 		protected void SetStyle ()
 		{
 			if (_textStyle == null) {
-				_textStyle = (string.IsNullOrEmpty (_styledElement.TextStyleInstance) && TextStyle.Instances.ContainsKey (_styledElement.TextStyleInstance))
-					? TextStyle.Instances [_styledElement.TextStyleInstance] : TextStyle.Main;
+				_textStyle = TextStyle.Main;
+
+				//(string.IsNullOrEmpty (_styledElement.TextStyleInstance) && TextStyle.Instances.ContainsKey (_styledElement.TextStyleInstance))
+				//? TextStyle.Instances [_styledElement.TextStyleInstance] as TextStyle : TextStyle.Main;
 			}
 		}
 	}

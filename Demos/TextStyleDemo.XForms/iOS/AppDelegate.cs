@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using TextStyles.Core;
+using TextStyles.XForms.iOS;
 using UIKit;
 
 namespace TextStyleDemo.XForms.iOS
@@ -14,9 +16,12 @@ namespace TextStyleDemo.XForms.iOS
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
+			Xamarin.Forms.DependencyService.Register<ITextStyle, TextStyles.iOS.TextStyle> ();
+			StyledLabelRenderer test;
+
 			// Code for starting up the Xamarin Test Cloud Agent
 #if ENABLE_TEST_CLOUD
-			Xamarin.Calabash.Start();
+			Xamarin.Calabash.Start ();
 #endif
 
 			LoadApplication (new App ());

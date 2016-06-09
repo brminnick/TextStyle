@@ -15,11 +15,15 @@ namespace TextStyles.Core
 
 		void Refresh ();
 
+		void Dispose ();
+
 		void SetBaseStyle (string baseStyleID, ref List<CssTagStyle> customTags);
 
 		T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true);
 
-		void Style<T> (T target, string styleID, string text = null);
+		void Style<T> (T target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true);
+
+		event EventHandler StylesChanged;
 	}
 }
 
