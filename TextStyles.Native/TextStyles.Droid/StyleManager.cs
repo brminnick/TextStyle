@@ -36,7 +36,7 @@ namespace TextStyles.Droid
 			var target = _instance.Create<T> (styleID, text, customTags, useExistingStyles);
 			_instance.SetBaseStyle (styleID, ref customTags);
 
-			var reference = new ViewStyle (_instance, target as TextView, text, true) {
+			var reference = new ViewStyle (_instance, target as TextView, styleID, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -57,7 +57,7 @@ namespace TextStyles.Droid
 		/// <param name="encoding">String encoding type</param>
 		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
 		{
-			var viewStyle = new ViewStyle (_instance, (TextView)target, text, true) {
+			var viewStyle = new ViewStyle (_instance, (TextView)target, styleID, text, true) {
 				StyleID = styleID,
 				CustomTags = customTags
 			};
@@ -158,26 +158,26 @@ namespace TextStyles.Droid
 
 		TextStyle _instance;
 
-		public ViewStyle (TextStyle instance, TextView target, string rawText, bool updateConstraints)
+		public ViewStyle (TextStyle instance, TextView target, string styleID, string text, bool updateConstraints)
 		{
 			_instance = instance;
 			Target = target;
-			_rawText = rawText;
+			StyleID = styleID;
 			_updateConstraints = updateConstraints;
-
-			ContainsHtml = (!string.IsNullOrEmpty (rawText) && Common.MatchHtmlTags.IsMatch (_rawText));
+			UpdateText (text);
 		}
 
 		public void UpdateText (string value = null)
 		{
-			if (!string.IsNullOrEmpty (value)) {
+			if (!String.IsNullOrEmpty (value)) {
 				_rawText = value;
+				ContainsHtml = (!String.IsNullOrEmpty (value) && Common.MatchHtmlTags.IsMatch (value));
 			}
 
 			var style = _instance.GetStyle (StyleID);
-			TextValue = _rawText;
+			TextValue = TextStyle.ParseString (style, _rawText);
 
-			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (_rawText, StyleID, CustomTags) : _instance.CreateStyledString (style, _rawText);
+			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (TextValue, StyleID, CustomTags) : _instance.CreateStyledString (style, TextValue);
 		}
 
 		public void UpdateDisplay ()
