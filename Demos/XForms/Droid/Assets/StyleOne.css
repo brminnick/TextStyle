@@ -1,0 +1,31 @@
+﻿h1{
+	font-family    		: "Archistico";
+	font-size        	: 38px;
+	text-overflow		: "ellipsis";
+	text-align			: "center";
+	lines				: 0;
+	color				: #000000;
+	line-height			: 36px;
+	letter-spacing		: 0;
+}
+
+h2{
+	font-family    		: "Avenir-Medium";
+	font-size        	: 16;
+	text-overflow		: "ellipsis";
+	text-align			: "center";
+	text-transform		: "uppercase";
+	color            	: #464646;
+}
+
+body{
+	font-family      	: "Avenir-Book";
+	color            	: #464646;
+	font-size        	: 14;
+	text-align			: "center";
+}
+
+i{
+	font-family    		: "Avenir-Heavy";
+	font-style			: "italic";
+}
