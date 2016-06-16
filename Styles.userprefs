@@ -1,4 +1,4 @@
-﻿<Properties StartupItem="Demos/XForms/Droid/TextStyleDemo.Droid.csproj">
+﻿<Properties StartupItem="Demos/XForms/iOS/TextStyleDemo.iOS.csproj">
   <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Demos/XForms/TextStyleDemo/TextStyleDemo.cs">
     <Files>
@@ -11,6 +11,6 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.Droid PreferredExecutionTarget="Android.192.168.57.101:5555" />
+  <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.Droid PreferredExecutionTarget="Android.Nexus_5_API_23" />
   <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />
 </Properties>

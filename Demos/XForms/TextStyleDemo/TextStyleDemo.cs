@@ -20,7 +20,8 @@ namespace TextStyleDemo.XForms
 			var content = new ContentPage {
 				Title = "TextStyleDemo XForms",
 				Content = new StackLayout {
-					VerticalOptions = LayoutOptions.Center,
+					Padding = new Thickness (20, 40, 20, 0),
+					VerticalOptions = LayoutOptions.StartAndExpand,
 					Children = {
 						new StyledLabel {
 							HorizontalTextAlignment = TextAlignment.Center,
@@ -39,6 +40,13 @@ namespace TextStyleDemo.XForms
 							CustomTags = new List<CssTagStyle> {
 								new CssTagStyle ("spot"){ CSS = "spot{color:#ff6c00}" }
 							}
+						},
+						new BoxView{
+							HeightRequest = 20
+						},
+						new BoxView{
+							HeightRequest = .5,
+							BackgroundColor = Color.Gray
 						},
 						new StyledLabel {
 							HorizontalTextAlignment = TextAlignment.Center,
