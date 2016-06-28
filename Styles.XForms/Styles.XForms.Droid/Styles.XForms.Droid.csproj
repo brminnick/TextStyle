@@ -76,6 +76,8 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyledLabelRenderer.cs" />
+    <Compile Include="StyledEntryRenderer.cs" />
+    <Compile Include="StyledEditorRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

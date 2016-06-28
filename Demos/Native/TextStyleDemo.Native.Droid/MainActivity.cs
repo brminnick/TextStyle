@@ -18,7 +18,7 @@ namespace TextStyleDemo.Droid
 		const string headingOne = @"The difference between";
 		const string headingTwo = @"Ordinary & Extraordinary";
 		const string headingThree = @"Is that little <spot>extra</spot>";
-		const string textBody = @"Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<p>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.</p>";
+		const string textBody = @"<h1>Geometry</h1> can produce legible letters but <i>art alone</i> makes them beautiful.<p>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.</p>";
 
 		bool _isFirstStyleSheet = true;
 		StyleManager _styleManager;

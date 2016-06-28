@@ -82,7 +82,7 @@ namespace Styles.Droid.Text
 			text.Replace (start, length, parsedString);
 
 			if (start != length)
-				text.SetSpan (newSpan, start, length, SpanTypes.ExclusiveExclusive);
+				text.SetSpan (newSpan, start, length, SpanTypes.InclusiveExclusive);
 		}
 
 		/// <summary>

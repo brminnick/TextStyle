@@ -181,11 +181,11 @@ namespace Styles.Droid.Text
 			var isHTML = (!string.IsNullOrEmpty (text) && Common.MatchHtmlTags.IsMatch (text));
 
 			// Style the TextView
-			if (isHTML && type == typeTextView) {
-				StyleTextView (textView, style, false);
+			if (isHTML) {
+				StyleTextView (textView, style, true);
 				textView.SetText (CreateHtmlString (text, styleID, customTags, useExistingStyles), TextView.BufferType.Spannable);
 
-			} else if (style.RequiresHtmlTags () && type == typeTextView) {
+			} else if (style.RequiresHtmlTags ()) {
 				StyleTextView (textView, style, false);
 
 				var builder = new SpannableStringBuilder (ParseString (style, text));

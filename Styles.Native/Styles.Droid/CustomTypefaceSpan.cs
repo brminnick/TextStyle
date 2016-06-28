@@ -29,6 +29,8 @@ namespace Styles.Droid.Text
 
 		void ApplyCustomTypeFace (Paint paint)
 		{
+			var random = new Random ();
+
 			// Color
 			if (!String.IsNullOrEmpty (_style.Color))
 				paint.Color = Color.White.FromHex (_style.Color);

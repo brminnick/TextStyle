@@ -1,22 +1,24 @@
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
+﻿using System;
 using Styles.iOS.Text;
 using Styles.XForms.Core;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer (typeof (StyledLabel), typeof (Styles.XForms.iOS.StyledLabelRenderer))]
+[assembly: ExportRenderer (typeof (StyledEditor), typeof (Styles.XForms.iOS.StyledEditorRenderer))]
 namespace Styles.XForms.iOS
 {
-	//[Foundation.Preserve]
-	public class StyledLabelRenderer : LabelRenderer
+	public class StyledEditorRenderer : EditorRenderer
 	{
-		StyledLabel _styledElement;
+		StyledEditor _styledElement;
 		TextStyle _textStyle;
 
-		protected override void OnElementChanged (ElementChangedEventArgs<Label> e)
+		public string RawText { get; set; }
+
+		protected override void OnElementChanged (ElementChangedEventArgs<Editor> e)
 		{
 			base.OnElementChanged (e);
 
-			_styledElement = _styledElement ?? (Element as StyledLabel);
+			_styledElement = _styledElement ?? (Element as StyledEditor);
 
 			if (Control != null) {
 				SetStyle ();
@@ -27,10 +29,13 @@ namespace Styles.XForms.iOS
 		protected override void OnElementPropertyChanged (object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			base.OnElementPropertyChanged (sender, e);
+			RawText = Control.Text;
+		}
 
-			if (e.PropertyName == "Text") {
-				_textStyle.Style (Control, _styledElement.CssStyle, null, _styledElement.CustomTags);
-			}
+		// TODO look at implementing a better way of updating the view when writing HTML
+		public void UpdateStyle ()
+		{
+			_textStyle.Style (Control, _styledElement.CssStyle, null, _styledElement.CustomTags);
 		}
 
 		protected void SetStyle ()
@@ -44,3 +49,4 @@ namespace Styles.XForms.iOS
 		}
 	}
 }
+

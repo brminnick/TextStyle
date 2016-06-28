@@ -1,22 +1,21 @@
 ﻿using System;
-using Android.Widget;
 using Styles.Droid.Text;
 using Styles.XForms.Core;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer (typeof (StyledLabel), typeof (Styles.XForms.Droid.StyledLabelRenderer))]
+[assembly: ExportRenderer (typeof (StyledEditor), typeof (Styles.XForms.Droid.StyledEditorRenderer))]
 namespace Styles.XForms.Droid
 {
-	public class StyledLabelRenderer : LabelRenderer
+	public class StyledEditorRenderer : EditorRenderer
 	{
-		StyledLabel _styledElement;
+		StyledEditor _styledElement;
 
-		protected override void OnElementChanged (ElementChangedEventArgs<Label> e)
+		protected override void OnElementChanged (ElementChangedEventArgs<Editor> e)
 		{
 			base.OnElementChanged (e);
 
-			_styledElement = _styledElement ?? (Element as StyledLabel);
+			_styledElement = _styledElement ?? (Element as StyledEditor);
 
 			var cssStyle = _styledElement.CssStyle;
 

@@ -36,6 +36,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyledLabel.cs" />
     <Compile Include="ColorExtensions.cs" />
+    <Compile Include="StyledEditor.cs" />
+    <Compile Include="StyledEntry.cs" />
+    <Compile Include="IStyledView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

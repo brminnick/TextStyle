@@ -52,6 +52,10 @@ namespace TextStyleDemo.XForms
 							HorizontalTextAlignment = TextAlignment.Center,
 							Text = "Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<br/><br/>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.",
 							CssStyle ="body"
+						},
+						new StyledEntry{
+							Text = "<h1>Lorum</h1> Ipsum Facto",
+							CssStyle = "body"
 						}
 					}
 				}

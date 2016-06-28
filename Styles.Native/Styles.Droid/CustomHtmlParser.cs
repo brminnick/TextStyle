@@ -98,29 +98,19 @@ namespace Styles.Droid.Text
 			// loop through spans and apply text formating where needed
 			if (_defaultStyle?.TextTransform != TextStyleTextTransform.None) {
 				var allSpans = _spannableStringBuilder.GetSpans (0, _spannableStringBuilder.Length (), Java.Lang.Class.FromType (typeof (Java.Lang.Object)));
+				var hasDefaultStyle = (_defaultStyle != null);
 
 				// Pre first span
-				var firstSpanIndex = (allSpans.Length > 0) ? _spannableStringBuilder.GetSpanStart (allSpans [0]) : 0;
-				if (firstSpanIndex > 0)
-					TransformTextRange (_spannableStringBuilder, _defaultStyle, 0, firstSpanIndex);
+				var firstSpanStart = allSpans.Length > 0 ? _spannableStringBuilder.GetSpanStart (allSpans [0]) : 0;
+				if (hasDefaultStyle)
+					TransformTextRange (_spannableStringBuilder, _defaultStyle, 0, firstSpanStart);
 
 				// In between spans & last span
-				for (int i = 0; i < allSpans.Length; i++) {
+				for (int i = (hasDefaultStyle ? 1 : 0); i < allSpans.Length; i++) {
 					startIndex = _spannableStringBuilder.GetSpanEnd (allSpans [i]);
 					endIndex = (i + 1 < allSpans.Length) ? _spannableStringBuilder.GetSpanStart (allSpans [i + 1]) : _spannableStringBuilder.Length ();
+
 					TransformTextRange (_spannableStringBuilder, _defaultStyle, startIndex, endIndex);
-				}
-			}
-
-			// Apply the default style to the entire text range
-			if (_defaultStyle != null) {
-
-				Typeface font = null;
-				if (!string.IsNullOrEmpty (_defaultStyle.Font)) {
-					_instance._typeFaces.TryGetValue (_defaultStyle.Font, out font);
-
-					var customSpan = new CustomTypefaceSpan ("", font, _defaultStyle);
-					_spannableStringBuilder.SetSpan (customSpan, 0, _spannableStringBuilder.Length (), SpanTypes.ExclusiveExclusive);
 				}
 			}
 
@@ -136,6 +126,7 @@ namespace Styles.Droid.Text
 		/// <param name="startIndex">Start index.</param>
 		/// <param name="endIndex">End index.</param>
 		void TransformTextRange (SpannableStringBuilder text, TextStyleParameters style, int startIndex, int endIndex)
+
 		{
 			if (startIndex == endIndex)
 				return;
@@ -296,6 +287,7 @@ namespace Styles.Droid.Text
 		/// <param name="text">The text contained within the span</param>
 		/// <param name="kind">Object type</param>
 		static Java.Lang.Object getLast (ISpanned text, Java.Lang.Class kind)
+
 		{
 			/*
 		 * This knows that the last returned object from getSpans()
@@ -442,6 +434,7 @@ namespace Styles.Droid.Text
 		/// <param name="text">SpannableStringBuilder</param>
 		/// <param name="attributes">IAttributes</param>
 		static void startA (SpannableStringBuilder text, IAttributes attributes)
+
 		{
 			String href = attributes.GetValue ("href");
 
