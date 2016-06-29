@@ -13,13 +13,9 @@ namespace Styles.XForms.Droid
 		StyledEntry _styledElement;
 		ITextStyle _textStyle;
 
-		public bool AutoRenderHtml { get; set; }
-
 		protected override void OnElementChanged (ElementChangedEventArgs<Entry> e)
 		{
 			base.OnElementChanged (e);
-
-			AutoRenderHtml = true;
 
 			_styledElement = _styledElement ?? (Element as StyledEntry);
 
@@ -37,7 +33,7 @@ namespace Styles.XForms.Droid
 		{
 			base.OnElementPropertyChanged (sender, e);
 
-			if (AutoRenderHtml) {
+			if (_styledElement.EnableHtmlEditing) {
 				switch (e.PropertyName) {
 				case "Text":
 					if (Control.IsFocused)

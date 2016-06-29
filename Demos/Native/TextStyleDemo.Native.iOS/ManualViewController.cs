@@ -50,6 +50,9 @@ namespace TextStyleDemo.iOS
 				Frame = new CGRect (0, 0, 6, 6)
 			};
 
+			var tapper = new UITapGestureRecognizer (() => { View.EndEditing (true); }) { CancelsTouchesInView = false };
+			View.AddGestureRecognizer (tapper);
+
 			Add (_textEntry);
 		}
 

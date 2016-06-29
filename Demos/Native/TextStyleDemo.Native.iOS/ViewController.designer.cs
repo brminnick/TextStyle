@@ -20,6 +20,10 @@ namespace TextStyleDemo.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField entry { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelOne { get; set; }
 
         [Outlet]
@@ -35,6 +39,11 @@ namespace TextStyleDemo.iOS
             if (body != null) {
                 body.Dispose ();
                 body = null;
+            }
+
+            if (entry != null) {
+                entry.Dispose ();
+                entry = null;
             }
 
             if (labelOne != null) {

@@ -1433,8 +1433,8 @@ namespace TextStyleDemo.Droid
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0c0056
-			public const int action0 = 2131492950;
+			// aapt resource value: 0x7f0c0058
+			public const int action0 = 2131492952;
 			
 			// aapt resource value: 0x7f0c0041
 			public const int action_bar = 2131492929;
@@ -1460,8 +1460,8 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0042
 			public const int action_context_bar = 2131492930;
 			
-			// aapt resource value: 0x7f0c005a
-			public const int action_divider = 2131492954;
+			// aapt resource value: 0x7f0c005c
+			public const int action_divider = 2131492956;
 			
 			// aapt resource value: 0x7f0c0002
 			public const int action_menu_divider = 2131492866;
@@ -1490,20 +1490,20 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0018
 			public const int beginning = 2131492888;
 			
-			// aapt resource value: 0x7f0c0053
-			public const int body = 2131492947;
+			// aapt resource value: 0x7f0c0054
+			public const int body = 2131492948;
 			
 			// aapt resource value: 0x7f0c002b
 			public const int buttonPanel = 2131492907;
 			
-			// aapt resource value: 0x7f0c0057
-			public const int cancel_action = 2131492951;
+			// aapt resource value: 0x7f0c0059
+			public const int cancel_action = 2131492953;
 			
 			// aapt resource value: 0x7f0c0039
 			public const int checkbox = 2131492921;
 			
-			// aapt resource value: 0x7f0c005d
-			public const int chronometer = 2131492957;
+			// aapt resource value: 0x7f0c005f
+			public const int chronometer = 2131492959;
 			
 			// aapt resource value: 0x7f0c001c
 			public const int collapseActionView = 2131492892;
@@ -1526,14 +1526,17 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c000c
 			public const int disableHome = 2131492876;
 			
+			// aapt resource value: 0x7f0c0055
+			public const int editText = 2131492949;
+			
 			// aapt resource value: 0x7f0c0043
 			public const int edit_query = 2131492931;
 			
 			// aapt resource value: 0x7f0c0019
 			public const int end = 2131492889;
 			
-			// aapt resource value: 0x7f0c0062
-			public const int end_padder = 2131492962;
+			// aapt resource value: 0x7f0c0064
+			public const int end_padder = 2131492964;
 			
 			// aapt resource value: 0x7f0c0025
 			public const int expand_activities_button = 2131492901;
@@ -1556,23 +1559,26 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0026
 			public const int image = 2131492902;
 			
-			// aapt resource value: 0x7f0c0061
-			public const int info = 2131492961;
-			
-			// aapt resource value: 0x7f0c0050
-			public const int labelOne = 2131492944;
-			
-			// aapt resource value: 0x7f0c0052
-			public const int labelThree = 2131492946;
+			// aapt resource value: 0x7f0c0063
+			public const int info = 2131492963;
 			
 			// aapt resource value: 0x7f0c0051
-			public const int labelTwo = 2131492945;
+			public const int labelOne = 2131492945;
 			
-			// aapt resource value: 0x7f0c005b
-			public const int line1 = 2131492955;
+			// aapt resource value: 0x7f0c0053
+			public const int labelThree = 2131492947;
 			
-			// aapt resource value: 0x7f0c005f
-			public const int line3 = 2131492959;
+			// aapt resource value: 0x7f0c0052
+			public const int labelTwo = 2131492946;
+			
+			// aapt resource value: 0x7f0c0050
+			public const int layout = 2131492944;
+			
+			// aapt resource value: 0x7f0c005d
+			public const int line1 = 2131492957;
+			
+			// aapt resource value: 0x7f0c0061
+			public const int line3 = 2131492961;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int listMode = 2131492873;
@@ -1580,8 +1586,8 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0028
 			public const int list_item = 2131492904;
 			
-			// aapt resource value: 0x7f0c0059
-			public const int media_actions = 2131492953;
+			// aapt resource value: 0x7f0c005b
+			public const int media_actions = 2131492955;
 			
 			// aapt resource value: 0x7f0c001a
 			public const int middle = 2131492890;
@@ -1610,8 +1616,8 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c003b
 			public const int radio = 2131492923;
 			
-			// aapt resource value: 0x7f0c0055
-			public const int refreshIcon = 2131492949;
+			// aapt resource value: 0x7f0c0057
+			public const int refreshIcon = 2131492951;
 			
 			// aapt resource value: 0x7f0c0014
 			public const int screen = 2131492884;
@@ -1670,8 +1676,8 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0011
 			public const int showTitle = 2131492881;
 			
-			// aapt resource value: 0x7f0c0054
-			public const int space1 = 2131492948;
+			// aapt resource value: 0x7f0c0056
+			public const int space1 = 2131492950;
 			
 			// aapt resource value: 0x7f0c002c
 			public const int spacer = 2131492908;
@@ -1688,8 +1694,8 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c0017
 			public const int src_over = 2131492887;
 			
-			// aapt resource value: 0x7f0c0058
-			public const int status_bar_latest_event_content = 2131492952;
+			// aapt resource value: 0x7f0c005a
+			public const int status_bar_latest_event_content = 2131492954;
 			
 			// aapt resource value: 0x7f0c004c
 			public const int submit_area = 2131492940;
@@ -1697,17 +1703,17 @@ namespace TextStyleDemo.Droid
 			// aapt resource value: 0x7f0c000b
 			public const int tabMode = 2131492875;
 			
-			// aapt resource value: 0x7f0c0060
-			public const int text = 2131492960;
+			// aapt resource value: 0x7f0c0062
+			public const int text = 2131492962;
 			
-			// aapt resource value: 0x7f0c005e
-			public const int text2 = 2131492958;
+			// aapt resource value: 0x7f0c0060
+			public const int text2 = 2131492960;
 			
 			// aapt resource value: 0x7f0c0034
 			public const int textSpacerNoButtons = 2131492916;
 			
-			// aapt resource value: 0x7f0c005c
-			public const int time = 2131492956;
+			// aapt resource value: 0x7f0c005e
+			public const int time = 2131492958;
 			
 			// aapt resource value: 0x7f0c002a
 			public const int title = 2131492906;

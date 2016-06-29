@@ -54,6 +54,7 @@
     <Compile Include="TextStyle.cs" />
     <Compile Include="TextStyleParametersExtension.cs" />
     <Compile Include="TextViewExtensions.cs" />
+    <Compile Include="ViewStyle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

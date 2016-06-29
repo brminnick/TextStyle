@@ -50,11 +50,15 @@ namespace TextStyleDemo.iOS
 				new CssTagStyle ("spot"){ CSS = "spot{color:" + Colors.SpotColor.ToHex () + "}" }
 			});
 			_styleManager.Add (body, "body", textBody);
+			_styleManager.Add (entry, "body", @"hello <i>world</i>", enableHtmlEditing: true);
 
 			// Using extension methods
 			//body.AttributedText = "Hello world <b>this is a test</b>".ToAttributedString ();
 
 			Console.WriteLine ("Elapsed time {0}", stopwatch.ElapsedMilliseconds);
+
+			var tapper = new UITapGestureRecognizer (() => { View.EndEditing (true); }) { CancelsTouchesInView = false };
+			View.AddGestureRecognizer (tapper);
 
 			AddUIElements ();
 		}

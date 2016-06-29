@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Foundation;
 using Styles.Core.Text;
 using UIKit;
 
@@ -30,13 +29,14 @@ namespace Styles.iOS.Text
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
 		/// <typeparam name="T">Text container type (UIlabel, UITextView, UITextField)</typeparam>
-		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
+		public T Create<T> (string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool enableHtmlEditing = false)
 		{
 			var target = _instance.Create<T> (styleID, text, customTags, useExistingStyles);
 			_instance.SetBaseStyle (styleID, ref customTags);
 
 			var reference = new ViewStyle (_instance, target as UIView, styleID, text, true) {
-				CustomTags = customTags
+				CustomTags = customTags,
+				EnableHtmlEditing = enableHtmlEditing
 			};
 
 			_views.Add (target, reference);
@@ -53,13 +53,14 @@ namespace Styles.iOS.Text
 		/// <param name="customTags">A list of custom <c>CSSTagStyle</c> instances that set the styling for the html</param>
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
-		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true)
+		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool enableHtmlEditing = false)
 		{
 			// Set the base style for the field
 			_instance.SetBaseStyle (styleID, ref customTags);
 
 			var viewStyle = new ViewStyle (_instance, (UIView)target, styleID, text, true) {
-				CustomTags = customTags
+				CustomTags = customTags,
+				EnableHtmlEditing = enableHtmlEditing
 			};
 
 			_views.Add (target, viewStyle);
@@ -121,7 +122,7 @@ namespace Styles.iOS.Text
 		public void Dispose ()
 		{
 			foreach (var item in _views.Values) {
-				item.Target = null;
+				item.Dispose ();
 			}
 
 			_views.Clear ();
@@ -135,77 +136,6 @@ namespace Styles.iOS.Text
 			UpdateAll ();
 		}
 
-	}
-
-	class ViewStyle
-	{
-		public string StyleID { get; private set; }
-
-		public string TextValue { get; private set; }
-
-		public NSAttributedString AttributedValue { get; private set; }
-
-		public List<CssTagStyle> CustomTags { get; set; }
-
-		public UIView Target { get; set; }
-
-		public bool ContainsHtml { get; private set; }
-
-		string _rawText;
-
-		TextStyle _instance;
-
-		bool _updateConstraints;
-
-		public ViewStyle (TextStyle instance, UIView target, string styleID, string text, bool updateConstraints)
-		{
-			_instance = instance;
-			Target = target;
-			StyleID = styleID;
-			_updateConstraints = updateConstraints;
-			UpdateText (text);
-		}
-
-		public void UpdateText (string value = null)
-		{
-			if (!String.IsNullOrEmpty (value)) {
-				_rawText = value;
-				ContainsHtml = (!String.IsNullOrEmpty (value) && Common.MatchHtmlTags.IsMatch (value));
-			}
-
-			var style = _instance.GetStyle (StyleID);
-			TextValue = TextStyle.ParseString (style, _rawText);
-
-			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (TextValue, CustomTags) : _instance.CreateStyledString (style, TextValue);
-		}
-
-		public void UpdateFrame ()
-		{
-			var style = _instance.GetStyle (StyleID);
-
-			// Offset the frame if needed
-			if (_updateConstraints && style.LineHeight < 0f) {
-				var heightOffset = style.GetLineHeightOffset ();
-				var targetFrame = Target.Frame;
-				targetFrame.Height = (nfloat)Math.Ceiling (targetFrame.Height) + heightOffset;
-
-				if (Target.Constraints.Length > 0) {
-					foreach (var constraint in Target.Constraints) {
-						if (constraint.FirstAttribute == NSLayoutAttribute.Height) {
-							constraint.Constant = targetFrame.Height;
-							break;
-						}
-					}
-				} else {
-					Target.Frame = targetFrame;
-				}
-			}
-		}
-
-		public void UpdateDisplay ()
-		{
-			_instance.Style (Target, StyleID, _rawText, CustomTags);
-		}
 	}
 }
 

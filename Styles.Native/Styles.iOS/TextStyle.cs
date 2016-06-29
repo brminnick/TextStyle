@@ -154,12 +154,12 @@ namespace Styles.iOS.Text
 		}
 
 		// Style a UILable
-		public void StyleUILabel (UILabel target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
+		public void StyleUILabel (UILabel target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true, bool ignoreHtml = false)
 		{
 			var style = GetStyle (styleID);
 			text = text ?? target.Text;
 
-			if (IsHtml (text)) {
+			if (!ignoreHtml && IsHtml (text)) {
 				SetBaseStyle (style.Name, ref customTags);
 				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
 				return;
@@ -199,12 +199,12 @@ namespace Styles.iOS.Text
 		}
 
 		// Style a UITextView
-		public void StyleUITextView (UITextView target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
+		public void StyleUITextView (UITextView target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true, bool ignoreHtml = false)
 		{
 			var style = GetStyle (styleID);
 			text = text ?? target.Text;
 
-			if (IsHtml (text)) {
+			if (!ignoreHtml && IsHtml (text)) {
 				SetBaseStyle (style.Name, ref customTags);
 				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
 				return;
@@ -236,12 +236,12 @@ namespace Styles.iOS.Text
 		}
 
 		// Style a UITextField
-		public void StyleUITextField (UITextField target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true)
+		public void StyleUITextField (UITextField target, string styleID, string text = null, List<CssTagStyle> customTags = null, bool useExistingStyles = true, bool setFonts = true, bool ignoreHtml = false)
 		{
 			var style = GetStyle (styleID);
 			text = text ?? target.Text;
 
-			if (IsHtml (text)) {
+			if (!ignoreHtml && IsHtml (text)) {
 				SetBaseStyle (style.Name, ref customTags);
 				target.AttributedText = CreateHtmlString (text, customTags, useExistingStyles);
 				return;

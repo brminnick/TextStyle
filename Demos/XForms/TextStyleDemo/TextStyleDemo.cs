@@ -54,8 +54,9 @@ namespace TextStyleDemo.XForms
 							CssStyle ="body"
 						},
 						new StyledEntry{
-							Text = "<h1>Lorum</h1> Ipsum Facto",
-							CssStyle = "body"
+							Text = "Styled text <i>entry</i>",
+							CssStyle = "body",
+							EnableHtmlEditing = true
 						}
 					}
 				}

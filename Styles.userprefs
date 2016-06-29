@@ -1,11 +1,9 @@
-﻿<Properties StartupItem="Demos/XForms/Droid/TextStyleDemo.Droid.csproj">
+﻿<Properties StartupItem="Demos/Native/TextStyleDemo.Native.Droid/TextStyleDemo.Droid.csproj">
   <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />
   <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.Droid PreferredExecutionTarget="Android.LGH815e4b2349" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.Droid PreferredExecutionTarget="Android.LGH815e4b2349" />
   <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />

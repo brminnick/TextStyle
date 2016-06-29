@@ -205,7 +205,7 @@ namespace Styles.Droid.Text
 		#region Private Methods
 
 		// TODO implement this function for styling plain text views, for html based views perhaps not
-		internal void StyleTextView (TextView target, TextStyleParameters style, bool isPlainText)
+		internal void StyleTextView (TextView target, TextStyleParameters style, bool isPlainText, bool ignoreHtml = false)
 		{
 			var fontSize = (style.FontSize <= 0f) ? DefaultTextSize : style.FontSize;
 			target.SetTextSize (ComplexUnitType.Sp, fontSize);

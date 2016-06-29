@@ -54,6 +54,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Styled Text Entry" borderStyle="roundedRect" minimumFontSize="17" id="8" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="20" y="445" width="564" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -69,6 +74,9 @@
                             <constraint firstItem="vaP-Ah-TSW" firstAttribute="leading" secondItem="uk3-Mf-qEG" secondAttribute="leading" id="V1R-b7-Pzo"/>
                             <constraint firstItem="vaP-Ah-TSW" firstAttribute="trailing" secondItem="uk3-Mf-qEG" secondAttribute="trailing" id="abU-f6-g53"/>
                             <constraint firstItem="EQF-CO-aWD" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="xsR-Or-c7V"/>
+                            <constraint id="9" firstItem="8" firstAttribute="top" secondItem="EQF-CO-aWD" secondAttribute="bottom" constant="8"/>
+                            <constraint id="10" firstItem="8bC-Xf-vdC" firstAttribute="trailing" secondItem="8" secondAttribute="trailing" constant="16"/>
+                            <constraint id="13" firstItem="8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hIo-wB-R4J"/>
@@ -77,6 +85,7 @@
                         <outlet property="labelOne" destination="hVG-Ab-Z39" id="fFb-ES-xUH"/>
                         <outlet property="labelThree" destination="vaP-Ah-TSW" id="LfZ-o7-7je"/>
                         <outlet property="labelTwo" destination="uk3-Mf-qEG" id="CWH-4Z-QgF"/>
+                        <outlet property="entry" destination="8" id="name-outlet-8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -100,4 +109,7 @@
             <point key="canvasLocation" x="-756" y="249"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="StartupLogo.png" width="229" height="229"/>
+    </resources>
 </document>

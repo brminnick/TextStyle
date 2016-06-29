@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Android.Widget;
-using Android.Text;
 using Styles.Core.Text;
 
 namespace Styles.Droid.Text
@@ -55,11 +54,12 @@ namespace Styles.Droid.Text
 		/// <param name="customTags">A list of custom <c>CSSTagStyle</c> instances that set the styling for the html</param>
 		/// <param name="useExistingStyles">Existing CSS styles willl be used If set to <c>true</c></param>
 		/// <param name="encoding">String encoding type</param>
-		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null)
+		public void Add (object target, string styleID, string text = "", List<CssTagStyle> customTags = null, bool useExistingStyles = true, Encoding encoding = null, bool enableHtmlEditing = false)
 		{
 			var viewStyle = new ViewStyle (_instance, (TextView)target, styleID, text, true) {
 				StyleID = styleID,
-				CustomTags = customTags
+				CustomTags = customTags,
+				EnableHtmlEditing = enableHtmlEditing
 			};
 
 			_views.Add (target, viewStyle);
@@ -121,7 +121,7 @@ namespace Styles.Droid.Text
 		public void Dispose ()
 		{
 			foreach (var item in _views.Values) {
-				item.Target = null;
+				item.Dispose ();
 			}
 
 			_views.Clear ();
@@ -135,55 +135,6 @@ namespace Styles.Droid.Text
 			UpdateAll ();
 		}
 
-	}
-
-	// TODO consider abstracting this out
-	class ViewStyle
-	{
-		public string StyleID { get; set; }
-
-		public string TextValue { get; private set; }
-
-		public ISpanned AttributedValue { get; private set; }
-
-		public List<CssTagStyle> CustomTags { get; set; }
-
-		public TextView Target { get; set; }
-
-		public bool ContainsHtml { get; private set; }
-
-		string _rawText;
-
-		bool _updateConstraints;
-
-		TextStyle _instance;
-
-		public ViewStyle (TextStyle instance, TextView target, string styleID, string text, bool updateConstraints)
-		{
-			_instance = instance;
-			Target = target;
-			StyleID = styleID;
-			_updateConstraints = updateConstraints;
-			UpdateText (text);
-		}
-
-		public void UpdateText (string value = null)
-		{
-			if (!String.IsNullOrEmpty (value)) {
-				_rawText = value;
-				ContainsHtml = (!String.IsNullOrEmpty (value) && Common.MatchHtmlTags.IsMatch (value));
-			}
-
-			var style = _instance.GetStyle (StyleID);
-			TextValue = TextStyle.ParseString (style, _rawText);
-
-			AttributedValue = ContainsHtml ? _instance.CreateHtmlString (TextValue, StyleID, CustomTags) : _instance.CreateStyledString (style, TextValue);
-		}
-
-		public void UpdateDisplay ()
-		{
-			_instance.Style (Target, StyleID, _rawText, CustomTags, true);
-		}
 	}
 }
 

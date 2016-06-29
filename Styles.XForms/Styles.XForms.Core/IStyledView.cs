@@ -10,5 +10,10 @@ namespace Styles.XForms.Core
 		string TextStyleInstance { get; set; }
 		List<CssTagStyle> CustomTags { get; set; }
 	}
+
+	public interface IHtmlRenderer
+	{
+		bool EnableHtmlEditing { get; set; }
+	}
 }
 
