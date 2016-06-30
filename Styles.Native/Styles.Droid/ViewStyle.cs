@@ -48,7 +48,6 @@ namespace Styles.Droid
 
 		public ViewStyle (TextStyle instance, TextView target, string styleID, string text, bool updateConstraints)
 		{
-			count++;
 			_instance = instance;
 			_updateConstraints = updateConstraints;
 			_rawText = text;
@@ -92,11 +91,9 @@ namespace Styles.Droid
 		void TextFocusChanged (object sender, Android.Views.View.FocusChangeEventArgs e)
 		{
 			if (Target.IsFocused) {
-				//Target.Text = _rawText;
-				Console.WriteLine ("IS FOCUSED {0}", TextValue);
+				Target.Text = TextValue;
 			} else {
-				//_instance.Style (Target, StyleID, _rawText, CustomTags);
-				Console.WriteLine ("LOST FOCUS {0}", TextValue);
+				_instance.Style (Target, StyleID, _rawText, CustomTags);
 			}
 		}
 	}
