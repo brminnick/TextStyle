@@ -8,6 +8,7 @@ using Styles.Core.Text;
 
 namespace Styles.iOS.Text
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public class TextStyle : TextStyleBase, ITextStyle
 	{
 		#region Parameters

@@ -7,6 +7,7 @@ using UIKit;
 
 namespace Styles.iOS
 {
+	[Foundation.Preserve (AllMembers = true)]
 	class ViewStyle : IDisposable
 	{
 		public string StyleID { get; private set; }

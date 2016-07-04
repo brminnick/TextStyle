@@ -3,6 +3,7 @@ using Styles.iOS.Text;
 
 namespace UIKit
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public static class UILabelExtensions
 	{
 		// style an existing UILabel

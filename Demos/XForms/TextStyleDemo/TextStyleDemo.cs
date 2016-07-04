@@ -19,44 +19,46 @@ namespace TextStyleDemo.XForms
 			// The root page of your application
 			var content = new ContentPage {
 				Title = "TextStyleDemo XForms",
-				Content = new StackLayout {
-					Padding = new Thickness (20, 40, 20, 0),
-					VerticalOptions = LayoutOptions.StartAndExpand,
-					Children = {
-						new StyledLabel {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "The difference between",
-							CssStyle ="h2"
-						},
-						new StyledLabel {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Ordinary & Extraordinary",
-							CssStyle ="h1"
-						},
-						new StyledLabel {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Is that little <spot>extra</spot>",
-							CssStyle ="h2",
-							CustomTags = new List<CssTagStyle> {
-								new CssTagStyle ("spot"){ CSS = "spot{color:#ff6c00}" }
+				Content = new ScrollView {
+					Content = new StackLayout {
+						Padding = new Thickness (20, 40, 20, 0),
+						VerticalOptions = LayoutOptions.StartAndExpand,
+						Children = {
+							new StyledLabel {
+								HorizontalTextAlignment = TextAlignment.Center,
+								Text = "The difference between",
+								CssStyle ="h2"
+							},
+							new StyledLabel {
+								HorizontalTextAlignment = TextAlignment.Center,
+								Text = "Ordinary & Extraordinary",
+								CssStyle ="h1"
+							},
+							new StyledLabel {
+								HorizontalTextAlignment = TextAlignment.Center,
+								Text = "Is that little <spot>extra</spot>",
+								CssStyle ="h2",
+								CustomTags = new List<CssTagStyle> {
+									new CssTagStyle ("spot"){ CSS = "spot{color:#ff6c00}" }
+								}
+							},
+							new BoxView{
+								HeightRequest = 20
+							},
+							new BoxView{
+								HeightRequest = .5,
+								BackgroundColor = Color.Gray
+							},
+							new StyledLabel {
+								HorizontalTextAlignment = TextAlignment.Center,
+								Text = "Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<br/><br/>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.",
+								CssStyle ="body"
+							},
+							new StyledEntry{
+								Text = "Styled text <i>entry</i>",
+								CssStyle = "body",
+								EnableHtmlEditing = true
 							}
-						},
-						new BoxView{
-							HeightRequest = 20
-						},
-						new BoxView{
-							HeightRequest = .5,
-							BackgroundColor = Color.Gray
-						},
-						new StyledLabel {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Geometry can produce legible letters but <i>art alone</i> makes them beautiful.<br/><br/>Art begins where geometry ends, and imparts to letters a character trascending mere measurement.",
-							CssStyle ="body"
-						},
-						new StyledEntry{
-							Text = "Styled text <i>entry</i>",
-							CssStyle = "body",
-							EnableHtmlEditing = true
 						}
 					}
 				}

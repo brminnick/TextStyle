@@ -7,6 +7,7 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer (typeof (StyledEditor), typeof (Styles.XForms.iOS.StyledEditorRenderer))]
 namespace Styles.XForms.iOS
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public class StyledEditorRenderer : EditorRenderer
 	{
 		StyledEditor _styledElement;

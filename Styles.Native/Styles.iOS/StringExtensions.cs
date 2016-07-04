@@ -6,6 +6,7 @@ using Styles.iOS.Text;
 
 namespace System
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public static class StringExtensions
 	{
 		// Convert an HTML string to NSAttributedString

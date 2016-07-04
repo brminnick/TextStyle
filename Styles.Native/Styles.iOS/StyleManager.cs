@@ -5,6 +5,7 @@ using UIKit;
 
 namespace Styles.iOS.Text
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public class StyleManager : IDisposable
 	{
 		Dictionary<object, ViewStyle> _views;

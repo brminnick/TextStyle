@@ -3,6 +3,7 @@ using UIKit;
 
 namespace Styles.iOS
 {
+	[Foundation.Preserve (AllMembers = true)]
 	public static class UIColorExtensions
 	{
 		/// <summary>

@@ -6,7 +6,7 @@ using Styles.XForms.Core;
 [assembly: ExportRenderer (typeof (StyledLabel), typeof (Styles.XForms.iOS.StyledLabelRenderer))]
 namespace Styles.XForms.iOS
 {
-	//[Foundation.Preserve]
+	[Foundation.Preserve (AllMembers = true)]
 	public class StyledLabelRenderer : LabelRenderer
 	{
 		StyledLabel _styledElement;
