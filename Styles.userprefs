@@ -1,19 +1,17 @@
 ﻿<Properties StartupItem="Demos/XForms/iOS/TextStyleDemo.iOS.csproj" StartupConfiguration="{3F200488-E8CC-4D07-AE6E-7CB1F57171C4}|Default">
-  <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.5349a9ee745b81c2ca0deeb6f5edc95721522ecc" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Styles.XForms/Styles.XForms.iOS/StyledEntryRenderer.cs">
+  <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Demos/Native/TextStyleDemo.Native.iOS/ViewController.cs">
     <Files>
-      <File FileName="Demos/XForms/TextStyleDemo/TextStyleDemo.cs" Line="19" Column="31" />
-      <File FileName="Styles.XForms/Styles.XForms.iOS/StyledEditorRenderer.cs" Line="9" Column="2" />
-      <File FileName="Styles.XForms/Styles.XForms.iOS/StyledLabelRenderer.cs" Line="9" Column="3" />
-      <File FileName="Styles.XForms/Styles.XForms.iOS/StyledEntryRenderer.cs" Line="14" Column="30" />
+      <File FileName="Demos/Native/TextStyleDemo.Native.iOS/Resources/StyleOne.css" Line="1" Column="1" />
+      <File FileName="Demos/Native/TextStyleDemo.Native.iOS/ViewController.cs" Line="19" Column="151" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.Nexus_4_API_23" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.ItemProperties.Demos.Native.TextStyleDemo.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.192.168.57.101:5555" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.Droid PreferredExecutionTarget="Android.Nexus_4_API_23" />
-  <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.5349a9ee745b81c2ca0deeb6f5edc95721522ecc" />
+  <MonoDevelop.Ide.ItemProperties.Demos.XForms.TextStyleDemo.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.05B8CE46-3DD4-4152-BD0E-0E4AEAB4DAA8" />
 </Properties>
