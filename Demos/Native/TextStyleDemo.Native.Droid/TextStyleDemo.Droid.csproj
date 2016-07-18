@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,9 +73,7 @@
     <AndroidResource Include="Resources\drawable\arrowIcon.png" />
     <AndroidResource Include="Resources\drawable\refreshIcon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <AndroidAsset Include="Assets\Archistico_Simple.ttf" />
     <AndroidAsset Include="Assets\Avenir-Book.ttf" />
@@ -88,11 +86,11 @@
     <AndroidAsset Include="Assets\StyleTwo.css" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TextStyles.Native\TextStyles.Core\TextStyles.Core.csproj">
+    <ProjectReference Include="..\..\..\Styles.Native\Styles.Core\Styles.Core.csproj">
       <Project>{D511DFCF-6B36-431D-9381-BF05DFB965E3}</Project>
       <Name>Styles.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TextStyles.Native\TextStyles.Droid\TextStyles.Droid.csproj">
+    <ProjectReference Include="..\..\..\Styles.Native\Styles.Droid\Styles.Droid.csproj">
       <Project>{6A4F1217-3BE7-4B54-AC35-79F5BB02F700}</Project>
       <Name>Styles.Droid</Name>
     </ProjectReference>

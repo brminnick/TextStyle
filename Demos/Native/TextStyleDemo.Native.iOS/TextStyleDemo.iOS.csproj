@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -83,31 +83,71 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%403x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon%402x.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\iTunesArtwork%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%403x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%403x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%403x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\iTunesArtwork%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
@@ -139,11 +179,11 @@
     <BundleResource Include="Resources\OpenSans-CondLight.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TextStyles.Native\TextStyles.Core\TextStyles.Core.csproj">
+    <ProjectReference Include="..\..\..\Styles.Native\Styles.Core\Styles.Core.csproj">
       <Project>{D511DFCF-6B36-431D-9381-BF05DFB965E3}</Project>
       <Name>Styles.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TextStyles.Native\TextStyles.iOS\TextStyles.iOS.csproj">
+    <ProjectReference Include="..\..\..\Styles.Native\Styles.iOS\Styles.iOS.csproj">
       <Project>{C4EDA6EC-2916-460F-9FE9-14F6DA56F105}</Project>
       <Name>Styles.iOS</Name>
     </ProjectReference>
